@@ -2,8 +2,10 @@
 EXECUTABLE = Bomberman
 
 #parts
-EXTERNAL_OBJECTS = extern/lodepng.o
-OBJECTS = $(EXTERNAL_OBJECTS) main.o
+EXTERNAL_OBJECTS = extern/lodepng.o extern/gl_core_3_3.o
+GUI_OBJECTS = gui/Window.o gui/Event.o
+TOOLS_OBJECTS = tools/WinCodeTranslate.o
+OBJECTS = $(EXTERNAL_OBJECTS) $(GUI_OBJECTS) $(TOOLS_OBJECTS) Core.o main.o
 
 #build tools
 COMPILER = g++
