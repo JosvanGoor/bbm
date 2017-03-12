@@ -3,9 +3,11 @@ EXECUTABLE = Bomberman
 
 #parts
 EXTERNAL_OBJECTS = extern/lodepng.o extern/gl_core_3_3.o
+GEOMETRY_OBJECTS = geometry/Point.o geometry/Rectangle.o
 GUI_OBJECTS = gui/Window.o gui/Event.o
+MATH_OBJECTS = math/Math.o math/Matrix4x4.o math/Vector3.o math/Vector4.o
 TOOLS_OBJECTS = tools/WinCodeTranslate.o
-OBJECTS = $(EXTERNAL_OBJECTS) $(GUI_OBJECTS) $(TOOLS_OBJECTS) Core.o main.o
+OBJECTS = $(EXTERNAL_OBJECTS) $(GEOMETRY_OBJECTS) $(GUI_OBJECTS) $(TOOLS_OBJECTS) Core.o main.o
 
 #build tools
 COMPILER = g++
@@ -45,7 +47,5 @@ run: $(EXECUTABLE)
 
 #compile objects rule
 $(BUILD_DIRECTORY)/%.o: $(SOURCE_DIRECTORY)/%.cpp
-	#build file
 	$(COMPILER) $(FLAGS) -o $@ -c $<
-	#generate dependencies
 	$(COMPILER) -MM -MT $(BUILD_DIRECTORY)/$*.o src/$*.cpp > $(DEPENDENCY_DIRECTORY)/$*.d

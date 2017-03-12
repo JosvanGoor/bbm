@@ -1,33 +1,53 @@
 #ifndef BBM_GUI_EVENT_HPP
 #define BBM_GUI_EVENT_HPP
 
+#include "windows.h"
 #include "../Core.hpp"
-
-#define BBM_NO_EVENT            0x0000
-#define BBM_WINDOW_EVENT        0x0001
-#define BBM_KEYBOARD_EVENT      0x0002
-#define BBM_MOUSE_EVENT         0x0003
-#define BBM_MOUSEMOTION_EVENT   0x0004
-
-#define BBM_MOUSEMOVED          0x0101
-#define BBM_MOUSEDRAGGED        0x0102
-#define BBM_MOUSEBUTTONDOWN     0x0103
-#define BBM_MOUSEBUTTONUP       0x0104
-#define BBM_KEYDOWN             0x0105
-#define BBM_KEYUP               0x0106
-
-#define BBM_MODIFIER_ALT        0b000000000001
-#define BBM_MODIFIER_LALT       0b000000000010
-#define BBM_MODIFIER_RALT       0b000000000100
-#define BBM_MODIFIER_SHIFT      0b000000001000
-#define BBM_MODIFIER_RSHIFT     0b000000010000
-#define BBM_MODIFIER_LSHIFT     0b000000100000
-#define BBM_MODIFIER_CTRL       0b000001000000
-#define BBM_MODIFIER_LCTRL      0b000010000000
-#define BBM_MODIFIER_RCTRL      0b000100000000
 
 namespace gui
 {
+
+    enum
+    {
+        //event types
+        BBM_NO_EVENT =              0x0000,
+        BBM_WINDOW_EVENT =          0x0001,
+        BBM_KEYBOARD_EVENT =        0x0002,
+        BBM_MOUSE_EVENT =           0x0003,
+        BBM_MOUSEMOTION_EVENT =     0x0004,
+
+        //event action types
+        BBM_MOUSEMOVED =            0x0101,
+        BBM_MOUSEDRAGGED =          0x0102,
+        BBM_MOUSEBUTTONUP =         0x0104,
+        BBM_MOUSEBUTTONDOWN =       0x0103,
+        BBM_KEYDOWN =               0x0105,
+        BBM_KEYUP =                 0x0106,
+
+        //window events
+        BBM_WINDOW_MOVED =          0x0201,
+        BBM_WINDOW_CLOSED =         0x0202,
+        BBM_WINDOW_RESIZED =        0x0203,
+        BBM_WINDOW_LOSTFOCUS =      0x0204,
+        BBM_WINDOW_GAINEDFOCUS =    0x0205,
+
+        //modifier key constants
+        BBM_MODIFIER_ALT =          0b000000000001,
+        BBM_MODIFIER_LALT =         0b000000000010,
+        BBM_MODIFIER_RALT =         0b000000000100,
+        BBM_MODIFIER_SHIFT =        0b000000001000,
+        BBM_MODIFIER_RSHIFT =       0b000000010000,
+        BBM_MODIFIER_LSHIFT =       0b000000100000,
+        BBM_MODIFIER_CTRL =         0b000001000000,
+        BBM_MODIFIER_LCTRL =        0b000010000000,
+        BBM_MODIFIER_RCTRL =        0b000100000000,
+
+        //passthrough messages
+        BBM_PASS_WM_CLOSE =         WM_USER + 0x00,
+        BBM_PASS_WM_MOVE =          WM_USER + 0x01,
+        BBM_PASS_WM_ACTIVATEAPP =   WM_USER + 0x02
+    };
+
 
     class Event : public Object
     {
@@ -43,7 +63,9 @@ namespace gui
         int x() const;
         int y() const;
         int dx() const;
+        int width() const; //same as dx
         int dy() const;
+        int height() const; //same as dy
 
         //virtual override
         virtual std::string to_string() const;

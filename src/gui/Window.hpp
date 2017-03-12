@@ -7,6 +7,8 @@
 
 #include "Event.hpp"
 #include "../Core.hpp"
+#include "../geometry/Point.hpp"
+#include "../geometry/Rectangle.hpp"
 #include "../extern/gl_core_3_3.hpp"
 
 namespace gui
@@ -21,9 +23,8 @@ namespace gui
         HWND m_window_handle; //windowhandle
         HGLRC m_opengl_context; //opengl context handle
 
-        //latest observed mouse coordinates 
-        int m_mouse_x;
-        int m_mouse_y;
+        geometry::Point m_mouse_pos; //latest mouse coords
+        geometry::Rectangle m_window_pos; //window position and size
 
         static void set_pixelformat_descriptor(HDC hdc); //used in setup
         //callback function
@@ -33,8 +34,8 @@ namespace gui
         virtual std::string to_string() const;
 
     public:
-        Window(const std::string &title, size_t x = 200, size_t y = 200, size_t w = 1366, size_t h = 768);
-        ~Window();
+        Window(const std::string &title, bool border, size_t x = 200, size_t y = 200, size_t w = 1366, size_t h = 768);
+        virtual ~Window();
 
         bool get_event(Event *event);
         void swap_buffers() const;
@@ -44,6 +45,9 @@ namespace gui
     //translate windows error code
     std::string translate_last_windows_error(); //resets error code
     std::string translate_windows_error_code(DWORD error);
+
+    std::string translate_last_opengl_error(); //resets error code
+    std::string translate_opengl_error_code(GLenum error);
 
 }
 

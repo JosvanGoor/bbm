@@ -13,7 +13,9 @@ namespace gui
     int Event::x() const { return m_x; }
     int Event::y() const { return m_y; }
     int Event::dx() const { return m_dx; }
+    int Event::width() const { return m_dx; }
     int Event::dy() const { return m_dy; }
+    int Event::height() const { return m_dy; }
 
     std::string Event::to_string() const
     {
@@ -43,6 +45,12 @@ namespace gui
             case BBM_MOUSEBUTTONUP: s += "BBM_MOUSEBUTTONUP\n"; break;
             case BBM_KEYDOWN: s += "BBM_KEYDOWN\n"; break;
             case BBM_KEYUP: s += "BBM_KEYUP\n"; break;
+
+            case BBM_WINDOW_MOVED: s += "BBM_WINDOW_MOVED\n"; break;
+            case BBM_WINDOW_CLOSED: s += "BBM_WINDOW_CLOSED\n"; break;
+            case BBM_WINDOW_RESIZED: s += "BBM_WINDOW_RESIZED\n"; break;
+            case BBM_WINDOW_LOSTFOCUS: s += "BBM_WINDOW_LOSTFOCUS\n"; break;
+            case BBM_WINDOW_GAINEDFOCUS: s += "BBM_WINDOW_GAINEDFOCUS\n"; break;
             default: s += "UNKNOWN_ACTION_TYPE\n"; break;
         }
 
