@@ -4,7 +4,6 @@ EXECUTABLE = Bomberman
 #parts
 EXTERNAL_OBJECTS = extern/lodepng.o extern/gl_core_3_3.o
 GEOMETRY_OBJECTS = geometry/Point.o geometry/Rectangle.o
-GUI_OBJECTS = gui/Window.o gui/Event.o
 MATH_OBJECTS = math/Math.o math/Matrix4x4.o math/Vector3.o math/Vector4.o
 TOOLS_OBJECTS = tools/WinCodeTranslate.o
 OBJECTS = $(EXTERNAL_OBJECTS) $(GEOMETRY_OBJECTS) $(GUI_OBJECTS) $(TOOLS_OBJECTS) Core.o main.o
@@ -12,7 +11,8 @@ OBJECTS = $(EXTERNAL_OBJECTS) $(GEOMETRY_OBJECTS) $(GUI_OBJECTS) $(TOOLS_OBJECTS
 #build tools
 COMPILER = g++
 FLAGS = -std=c++14 -Wall -g
-LIBRARIES = -lm -lopengl32 -lgdi32
+LINKER_SDL = -lmingw32 -lSDL2main -lSDL2
+LIBRARIES = $(LINKER_SDL) -lm -lopengl32 -lgdi32
 
 #direcory structure
 SOURCE_DIRECTORY = src
