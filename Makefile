@@ -2,10 +2,9 @@
 EXECUTABLE = Bomberman
 
 #parts
-EXTERNAL_OBJECTS = extern/lodepng.o extern/gl_core_3_3.o
+EXTERNAL_OBJECTS = extern/lodepng.o extern/gl_core_4_4.o
 GEOMETRY_OBJECTS = geometry/Point.o geometry/Rectangle.o
 MATH_OBJECTS = math/Math.o math/Matrix4x4.o math/Vector3.o math/Vector4.o
-TOOLS_OBJECTS = tools/WinCodeTranslate.o
 OBJECTS = $(EXTERNAL_OBJECTS) $(GEOMETRY_OBJECTS) $(GUI_OBJECTS) $(TOOLS_OBJECTS) Core.o main.o
 
 #build tools

@@ -218,7 +218,7 @@ namespace math
         }
 
         //toString funcion
-        virtual std::string toString() const
+        virtual std::string to_string() const
         {
             std::stringstream ss;
             //TODO: Why is typeid throwing segfault?
