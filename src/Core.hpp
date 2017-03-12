@@ -1,10 +1,12 @@
 #ifndef BBM_OBJECT_HPP
 #define BBM_OBJECT_HPP
 
+#include <vector>
 #include <string>
 #include <iostream>
 #include <typeinfo>
 #include <exception>
+#include "extern/gl_core_4_4.h"
 
 class Object
 {
@@ -28,5 +30,11 @@ protected:
     std::string m_source;
     std::string m_message;
 };
+
+std::vector<unsigned char> read_file(std::string file);
+
+void print_if_opengl_error(std::string msg);
+std::string translate_last_opengl_error();
+std::string translate_opengl_error_code(GLenum error);
 
 #endif

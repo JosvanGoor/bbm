@@ -2,10 +2,11 @@
 EXECUTABLE = Bomberman
 
 #parts
+ENGINE = engine/ShaderProgram.o
 EXTERNAL_OBJECTS = extern/lodepng.o extern/gl_core_4_4.o
 GEOMETRY_OBJECTS = geometry/Point.o geometry/Rectangle.o
 MATH_OBJECTS = math/Math.o math/Matrix4x4.o math/Vector3.o math/Vector4.o
-OBJECTS = $(EXTERNAL_OBJECTS) $(GEOMETRY_OBJECTS) $(GUI_OBJECTS) $(TOOLS_OBJECTS) Core.o main.o
+OBJECTS = $(ENGINE) $(EXTERNAL_OBJECTS) $(GEOMETRY_OBJECTS) $(GUI_OBJECTS) $(TOOLS_OBJECTS) Core.o main.o
 
 #build tools
 COMPILER = g++
