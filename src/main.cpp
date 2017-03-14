@@ -5,6 +5,7 @@
 #include <iostream>
 
 #include "Core.hpp"
+#include "engine/Engine.hpp"
 #include "engine/TextureCache.hpp"
 #include "engine/ShaderProgram.hpp"
 #include "math/Vector3.hpp"
@@ -91,11 +92,16 @@ int main2(int argc, char **argv)
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, &image[0]);
     print_if_opengl_error("glTexImage2D");
 
+    Matrix4x4<float> translation;
+    translation = translation.translate(200.0f, 200.0f, 0.0f);
+    std::cout << "sizeof m4x4: " << sizeof(Matrix4x4<float>) << std::endl;
     Matrix4x4<float> ortho = orthographic_projection(0.0f, 1366.0f, 768.0f, .0f, -1.0f, 1.0f);
     GLint ortho_location = sp->uniform_location("ortho");
+    GLuint translation_location = sp->uniform_location("transform");
     GLint texture_location = sp->uniform_location("tex");
 
     std::cout << "ortho_location: " << ortho_location << std::endl;
+    std::cout << "translation_location: " << translation_location << std::endl;
     std::cout << "texture_location: " << texture_location << std::endl;
 
     float LOW = 10.01;
@@ -138,6 +144,7 @@ int main2(int argc, char **argv)
     print_if_opengl_error("glVertexAttrib texture");
 
     glUniformMatrix4fv(ortho_location, 1, GL_FALSE, ortho.data());
+    glUniformMatrix4fv(translation_location, 1, GL_FALSE, translation.data());
     print_if_opengl_error("glUniformMatrix");
 
     while(!quit)
@@ -169,10 +176,17 @@ int main(int argv, char **argc)
 {
     try
     {
-        main2(argv, argc);
+        engine::initialize_engine();
+        std::cout << std::endl;
+
+        engine::game_loop();
+        std::cout << std::endl;
+        
+        engine::unload_engine();
     }catch(Exception &e)
     {
         std::cout << e.message() << std::endl;
     }
+
     return 0;
 }

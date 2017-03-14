@@ -11,7 +11,7 @@ namespace engine
     class ShaderProgram : public Object
     {
     public:
-        ~ShaderProgram(); //public so its reachable for shared_ptr.
+        virtual ~ShaderProgram(); //public so its reachable for shared_ptr.
 
         void link();
         bool linked();

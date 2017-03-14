@@ -30,7 +30,7 @@ namespace engine
         {
             GLchar info[1024];
             glGetProgramInfoLog(m_shader_program, sizeof(info), NULL, info);
-            throw Exception("ShaderProgram::link", std::string(info));
+            throw Exception(__PRETTY_FUNCTION__, std::string(info));
         }
         
         m_linked = true;
@@ -47,7 +47,7 @@ namespace engine
         glUseProgram(m_shader_program);
 
         GLenum error = glGetError();
-        if(error != GL_NO_ERROR) throw Exception("ShaderProgram::activate", "Failed to activate shader program - " + translate_opengl_error_code(error));
+        if(error != GL_NO_ERROR) throw Exception(__PRETTY_FUNCTION__, "Failed to activate shader program - " + translate_opengl_error_code(error));
     }
 
     void ShaderProgram::add_vertex_shader(std::string file)
@@ -73,7 +73,7 @@ namespace engine
         {
             GLchar info[1024];
             glGetShaderInfoLog(m_vertex_shader, sizeof(info), NULL, info);
-            throw Exception("ShaderProgram::add_vertex_shader", std::string(info));
+            throw Exception(__PRETTY_FUNCTION__, std::string(info));
         }
     }
 
@@ -96,7 +96,7 @@ namespace engine
         {
             GLchar info[1024];
             glGetShaderInfoLog(m_fragment_shader, sizeof(info), NULL, info);
-            throw Exception("ShaderProgram::add_fragment_shader", std::string(info));
+            throw Exception(__PRETTY_FUNCTION__, std::string(info));
         }
     }
 

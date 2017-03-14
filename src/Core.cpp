@@ -24,7 +24,7 @@ const char* Exception::what() const noexcept
 
 std::string Exception::message() const
 {
-    return "From [" + m_source + "], Message: " + m_message;
+    return "Exception at " + m_source + ": " + m_message;
 }
 
 std::vector<unsigned char> read_file(std::string file)

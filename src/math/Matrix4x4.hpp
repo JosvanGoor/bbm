@@ -67,6 +67,11 @@ namespace math
             }
         }
 
+        Matrix4x4(const Matrix4x4<T> &mat4)
+        {
+            memcpy(m_data, mat4.m_data, sizeof(m_data));
+        }
+
         //sets the x,y value to T, does nothing when x or y are invalid.
         void set(size_t x, size_t y, T t)
         {
@@ -231,9 +236,9 @@ namespace math
         {
             Matrix4x4<T> mult;
 
-            mult.m_data[3] = x;
-            mult.m_data[7] = y;
-            mult.m_data[11] = z;
+            mult.m_data[12] = T(x);
+            mult.m_data[13] = T(y);
+            mult.m_data[14] = T(z);
 
             return (*this) * mult;
         }
