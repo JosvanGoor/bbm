@@ -11,8 +11,14 @@ OBJECTS = $(ENGINE) $(EXTERNAL_OBJECTS) $(GEOMETRY_OBJECTS) $(GUI_OBJECTS) $(TOO
 #build tools
 COMPILER = g++
 FLAGS = -std=c++14 -Wall -g
+
+ifeq ($(OS), Windows_NT)
 LINKER_SDL = -lmingw32 -lSDL2main -lSDL2
-LIBRARIES = $(LINKER_SDL) -lm -lopengl32 -lgdi32
+LIBRARIES = $(LINKER_SDL) -lm -lopengl32 -lgdi32 
+else 
+LIBRARIES = $(LINNKER_SDL) -lm -lGL -lGLU -lSDL2 -L/use/lib -lpthread
+endif
+
 
 #direcory structure
 SOURCE_DIRECTORY = src
