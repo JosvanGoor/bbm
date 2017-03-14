@@ -2,7 +2,7 @@
 EXECUTABLE = Bomberman
 
 #parts
-ENGINE = engine/ShaderProgram.o
+ENGINE = engine/ShaderProgram.o engine/TextureCache.o
 EXTERNAL_OBJECTS = extern/lodepng.o extern/gl_core_4_4.o
 GEOMETRY_OBJECTS = geometry/Point.o geometry/Rectangle.o
 MATH_OBJECTS = math/Math.o math/Matrix4x4.o math/Vector3.o math/Vector4.o
@@ -15,10 +15,9 @@ FLAGS = -std=c++14 -Wall -g
 ifeq ($(OS), Windows_NT)
 LINKER_SDL = -lmingw32 -lSDL2main -lSDL2
 LIBRARIES = $(LINKER_SDL) -lm -lopengl32 -lgdi32 
-else 
-LIBRARIES = $(LINNKER_SDL) -lm -lGL -lGLU -lSDL2 -L/use/lib -lpthread
+else 								#usr of user?
+LIBRARIES = -lm -lGL -lGLU -lSDL2 -L/user/lib -lpthread
 endif
-
 
 #direcory structure
 SOURCE_DIRECTORY = src
@@ -38,13 +37,15 @@ $(STRUCTURE_FLAG):
 	mkdir -p $(filter-out %./,$(addprefix $(DEPENDENCY_DIRECTORY)/,$(dir $(OBJECTS))))
 	touch $(STRUCTURE_FLAG)
 
-#call this when the folder structure changes
-restructure:
-	rm $(STRUCTURE_FLAG)
-
 #remove all non-source files
 clean:
 	rm -rf build/
+
+rebuild: clean $(EXECUTABLE)
+
+#call this when the folder structure changes
+restructure:
+	rm $(STRUCTURE_FLAG)
 
 #build and run
 run: $(EXECUTABLE)

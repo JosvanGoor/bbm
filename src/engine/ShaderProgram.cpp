@@ -116,4 +116,14 @@ namespace engine
         return "Opengl shader program - " + m_linked ? std::string("currently not linked") : std::string("linked");
     }
 
+    ShaderProgram* ShaderProgram::create()
+    {
+        return new ShaderProgram();
+    }
+
+    std::shared_ptr<ShaderProgram> ShaderProgram::create_shared()
+    {
+        return std::shared_ptr<ShaderProgram>(new ShaderProgram());
+    }
+
 }

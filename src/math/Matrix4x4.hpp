@@ -75,7 +75,7 @@ namespace math
         }
 
         //resets the matrix to the identity matrix
-        void loadIdentity()
+        void load_identity()
         {
             m_data[1] = m_data[2] = m_data[3] = 0;
             m_data[4] = m_data[6] = m_data[7] = 0;
@@ -94,9 +94,9 @@ namespace math
         }
 
         //returns a T[16] containing the values.
-        const T *values() const
+        const T *data() const
         {
-            return values();
+            return m_data;
         }
 
         //returns the value at x,y. returns T(0) when x or y is invalid.
@@ -299,7 +299,7 @@ namespace math
             return rval;
         }
 
-        virtual std::string toString() const
+        virtual std::string to_string() const
         {
             std::stringstream ss;
             //TODO: find out why typeinfo throws a segfault
@@ -314,7 +314,7 @@ namespace math
     };
 
     //generates a lookat matrix (used in calculating MVP matrix)
-    template<typename T> Matrix4x4<T> lookAt(Vector3<T> eye, Vector3<T> center, Vector3<T> up)
+    template<typename T> Matrix4x4<T> look_at(Vector3<T> eye, Vector3<T> center, Vector3<T> up)
     {
         Vector3<T> f = (center - eye).normalized();
         Vector3<T> u = up.normalized();
@@ -342,13 +342,13 @@ namespace math
     }
 
     //generates an orthographic projection matrix (used for calculating 2d MVP matrix)
-    template<typename T> Matrix4x4<T> orthographicProjection(T left, T right, T bottom, T top, T znear, T zfar)
+    template<typename T> Matrix4x4<T> orthographic_projection(T left, T right, T bottom, T top, T znear, T zfar)
     {
         Matrix4x4<T> rval;
 
         rval.m_data[0] = T(2.0f) / (right - left);
         rval.m_data[5] = T(2.0f) / (top - bottom);
-        rval.m_data[10] = T(2.0f) / (zfar - znear);
+        rval.m_data[10] = T(-2.0f) / (zfar - znear);
         rval.m_data[12] = -((right + left) / (right - left));
         rval.m_data[13] = -((top + bottom) / (top - bottom));
         rval.m_data[14] = -((zfar + znear) / (zfar - znear));
@@ -358,7 +358,7 @@ namespace math
     }
 
     //generates a perspective projection matrix (used for calculating 3d MVP matrix)
-    template<typename T> Matrix4x4<T> perspectiveProjection(T fov, T aspect, T znear, T zfar)
+    template<typename T> Matrix4x4<T> perspective_projection(T fov, T aspect, T znear, T zfar)
     {
         T rad = dtor(fov);
 

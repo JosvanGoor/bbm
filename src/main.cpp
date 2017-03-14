@@ -5,8 +5,11 @@
 #include <iostream>
 
 #include "Core.hpp"
+#include "engine/TextureCache.hpp"
 #include "engine/ShaderProgram.hpp"
 #include "math/Vector3.hpp"
+#include "math/Matrix4x4.hpp"
+#include "extern/lodepng.h"
 #include "extern/gl_core_4_4.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
@@ -22,7 +25,7 @@ std::string readFile(std::string file)
     return str;
 }
 
-int main(int argc, char **argv)
+int main2(int argc, char **argv)
 {
 
     SDL_Window *window = nullptr;
@@ -61,39 +64,89 @@ int main(int argc, char **argv)
     SDL_Event event;
     bool quit = false;
 
-    ShaderProgram *sp = new ShaderProgram();
+    ShaderProgram *sp = ShaderProgram::create();
     sp->add_vertex_shader("shaders/vertexshader2d.glsl");
     sp->add_fragment_shader("shaders/fragmentshader2d.glsl");
-    sp->link();
+    //sp->link();
     sp->activate();
 
-    //vertices
-    std::vector<float> floats = {-1.0, -1.0, 0.0,
-                                 1.0, -1.0, 0.0,
-                                 0.0, 1.0, 0.0};
-    
+    TextureCache cache;
+
+    //load texture
+    unsigned int width, height;
+    std::vector<unsigned char> image;
+    unsigned int error = lodepng::decode(image, width, height, std::string("textures/test_tex.png"));
+    if(error != 0)
+    {
+        std::cout << "Error loading texture file" << std::endl;
+        return -12378;
+    }
+
+    GLuint gltex;
+    glGenTextures(1, &gltex);
+    glBindTexture(GL_TEXTURE_2D, gltex);
+
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); //GL_NEAREST = no smoothing
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, &image[0]);
+    print_if_opengl_error("glTexImage2D");
+
+    Matrix4x4<float> ortho = orthographic_projection(0.0f, 1366.0f, 768.0f, .0f, -1.0f, 1.0f);
+    GLint ortho_location = sp->uniform_location("ortho");
+    GLint texture_location = sp->uniform_location("tex");
+
+    std::cout << "ortho_location: " << ortho_location << std::endl;
+    std::cout << "texture_location: " << texture_location << std::endl;
+
+    float LOW = 10.01;
+    float TEXLOW = 0.0;
+    float TEXHGH = 1.0;
+    float HGH = 700.99;
+    std::vector<float> floats =  {LOW, LOW, 0.0, TEXLOW, TEXLOW,
+                                  HGH, LOW, 0.0, TEXHGH, TEXLOW,
+                                  LOW, HGH, 0.0, TEXLOW, TEXHGH,
+                                  HGH, LOW, 0.0, TEXHGH, TEXLOW,
+                                  HGH, HGH, 0.0, TEXHGH, TEXHGH,
+                                  LOW, HGH, 0.0, TEXLOW, TEXHGH};
+
     //build vbo
     GLuint vao;
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
 
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, gltex);
+    print_if_opengl_error("glBindTexture");
+
     GLuint vbo;
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, floats.size() * sizeof(float), floats.data(), GL_STATIC_DRAW);
+    print_if_opengl_error("glBufferData");
 
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+    print_if_opengl_error("glEnableArrays");
+
+    int stride = (3 + 2) * sizeof(float);
+    void* vertex_offset = (void*)0;
+    void* texture_offset = (void*)(3 * sizeof(float));
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, vertex_offset);
+    print_if_opengl_error("glVertexAttrib vertices");
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, stride, texture_offset);
+    print_if_opengl_error("glVertexAttrib texture");
+
+    glUniformMatrix4fv(ortho_location, 1, GL_FALSE, ortho.data());
+    print_if_opengl_error("glUniformMatrix");
 
     while(!quit)
     {
-
-        glEnableVertexAttribArray(0);
+        glBindTexture(GL_TEXTURE_2D, cache.get_texture("textures/test_tex.png"));
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
-        glDisableVertexAttribArray(0);
-
+        glDrawArrays(GL_TRIANGLES, 0, 6);
         SDL_GL_SwapWindow(window);
-        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        glClearColor(.0f, .0f, .0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         while(SDL_PollEvent(&event))
@@ -109,5 +162,17 @@ int main(int argc, char **argv)
     SDL_DestroyWindow(window);
     SDL_Quit();
 
+    return 0;
+}
+
+int main(int argv, char **argc)
+{
+    try
+    {
+        main2(argv, argc);
+    }catch(Exception &e)
+    {
+        std::cout << e.message() << std::endl;
+    }
     return 0;
 }
