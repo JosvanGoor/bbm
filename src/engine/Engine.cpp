@@ -15,6 +15,7 @@
 namespace engine
 {
     bool initialized = false;
+    bool legacy_shaders = false;
     size_t tick_rate; //ticks/second
     size_t current_tick;
 
@@ -73,6 +74,7 @@ namespace engine
             std::cout << "attempting to compile legacy shaders... ";
             shader_program->add_vertex_shader("shaders/vertexshader2dlegacy.glsl");
             shader_program->add_fragment_shader("shaders/fragmentshader2dlegacy.glsl");
+            legacy_shaders = true;
             std::cout << "done\n";
         }
         shader_program->link();
