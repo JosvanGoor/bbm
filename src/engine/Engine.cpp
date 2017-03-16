@@ -69,10 +69,12 @@ namespace engine
         }
         catch(Exception &exc)
         {
-            std::cout << "failed: " << exc.message() << "\n";
+            std::cout << "failed\n    " << exc.message();
             std::cout << "attempting to compile legacy shaders... ";
             shader_program->add_vertex_shader("shaders/vertexshader2dlegacy.glsl");
             shader_program->add_fragment_shader("shaders/fragmentshader2dlegacy.glsl");
+            glBindAttribLocation(shader_program->program_id(), 0, "position");
+            glBindAttribLocation(shader_program->program_id(), 1, "texture_coords");
             std::cout << "done\n";
         }
         shader_program->link();
