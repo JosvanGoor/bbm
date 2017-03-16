@@ -62,13 +62,18 @@ namespace engine
         shader_program = ShaderProgram::create();
         try 
         {
+            std::cout << "attempting to compile shaders... ";
             shader_program->add_vertex_shader("shaders/vertexshader2d.glsl");
             shader_program->add_fragment_shader("shaders/fragmentshader2d.glsl");
+            std::cout << "done\n";
         }
         catch(Exception &exc)
         {
+            std::cout << "failed: " << exc.message() << "\n";
+            std::cout << "attempting to compile legacy shaders... ";
             shader_program->add_vertex_shader("shaders/vertexshader2dlegacy.glsl");
             shader_program->add_fragment_shader("shaders/fragmentshader2dlegacy.glsl");
+            std::cout << "done\n";
         }
         shader_program->link();
         shader_program->activate();
