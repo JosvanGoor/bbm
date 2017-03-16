@@ -44,6 +44,8 @@ namespace engine
 
         tick_rate = 40;
 
+        if(SDL_Init(SDL_INIT_VIDEO) < 0) throw Exception(__PRETTY_FUNCTION__, "error initializing sdl libraries");
+
         window_handle = SDL_CreateWindow("Bomberman v0.1", 200, 200, 1366, 768, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
         if(!window_handle) throw Exception(__PRETTY_FUNCTION__, "could not create sdl window");
         std::cout << "Created window...\n";
@@ -58,8 +60,16 @@ namespace engine
         SDL_GL_SetSwapInterval(0); //disable vsync
 
         shader_program = ShaderProgram::create();
-        shader_program->add_vertex_shader("shaders/vertexshader2d.glsl");
-        shader_program->add_fragment_shader("shaders/fragmentshader2d.glsl");
+        try 
+        {
+            shader_program->add_vertex_shader("shaders/vertexshader2d.glsl");
+            shader_program->add_fragment_shader("shaders/fragmentshader2d.glsl");
+        }
+        catch(Exception &exc)
+        {
+            shader_program->add_vertex_shader("shaders/vertexshader2dlegacy.glsl");
+            shader_program->add_fragment_shader("shaders/fragmentshader2dlegacy.glsl");
+        }
         shader_program->link();
         shader_program->activate();
 
@@ -119,7 +129,7 @@ namespace engine
                 in_this_second -= 1000;
             }
 
-            //process inputs
+            /////////////////////////////////////// PROCESS INPUTS /////////////////////////////////////////
             SDL_Event event;
             while(SDL_PollEvent(&event))
             {
@@ -132,8 +142,11 @@ namespace engine
 
             while(lag >= time_between_ticks)
             {
-                //update
-                //collisionchecks etc
+                /////////////////////////////////////// LOGIC UPDATES /////////////////////////////////////////
+                
+                /////////////////////////////////////// COLLISION UPDATES /////////////////////////////////////////
+                
+                
                 lag -= time_between_ticks;
                 updates++;
                 current_tick++;
@@ -150,7 +163,7 @@ namespace engine
 
             SDL_GL_SwapWindow(window_handle);
 
-            //std::this_thread::sleep_for(std::chrono::milliseconds(1));
+            std::this_thread::sleep_for(std::chrono::milliseconds(50));
             render_passes++;
         }
 
@@ -172,6 +185,7 @@ namespace engine
         delete shader_program;
         std::cout << "prepared shaderprogram for deconstruction\n";
 
+        SDL_GL_DeleteContext(opengl_context);
         SDL_DestroyWindow(window_handle);
         SDL_Quit();
         std::cout << "Destroyed sdl window, and quit environment\n";

@@ -60,6 +60,14 @@ run: $(EXECUTABLE)
 	@echo "Finalized build, running executable:"
 	./$(EXECUTABLE)
 
+valgrind: $(EXECUTABLE)
+	@echo running executable through valgrind on default settings
+	valgrind --track-origins=yes ./$(EXECUTABLE)
+
+fullvalgrind: $(EXECUTABLE)
+	@echo running executable through valgrind with extra checks
+	valgrind --track-origins=yes --leak-check=full --show-reachable=yes ./$(EXECUTABLE)
+
 #compile objects rule
 $(BUILD_DIRECTORY)/%.o: $(SOURCE_DIRECTORY)/%.cpp
 	$(COMPILER) $(FLAGS) -o $@ -c $<

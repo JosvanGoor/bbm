@@ -8,6 +8,7 @@
 #include "engine/Engine.hpp"
 #include "engine/TextureCache.hpp"
 #include "engine/ShaderProgram.hpp"
+#include "geometry/Rectangle.hpp"
 #include "math/Vector3.hpp"
 #include "math/Matrix4x4.hpp"
 #include "extern/lodepng.h"
@@ -17,6 +18,7 @@
 
 using namespace math;
 using namespace engine;
+using namespace geometry;
 
 std::string readFile(std::string file)
 {
@@ -43,7 +45,7 @@ int main2(int argc, char **argv)
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 4);
 
     window = SDL_CreateWindow("SDL tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1366, 768, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
-    if(!window)
+    if(window == nullptr)
     {
         std::cout << "Could not create window" << std::endl;
         return -2;
