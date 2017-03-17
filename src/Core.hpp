@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <fstream>
 #include <iostream>
 #include <typeinfo>
 #include <exception>
@@ -31,6 +32,7 @@ protected:
     std::string m_message;
 };
 
+std::string get_line(std::istream &is);
 std::vector<unsigned char> read_file(std::string file);
 
 void print_if_opengl_error(std::string msg);

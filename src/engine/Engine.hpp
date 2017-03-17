@@ -17,7 +17,8 @@ namespace engine
     void initialize_engine(); //throws when something fails.
 
     void game_loop(); //can block a loooong time :)
-    
+
+    void set_default_settings(); //generates and sets default settings into engine.
 }
 
 #endif

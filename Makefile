@@ -13,7 +13,14 @@ MATH_OBJECTS = 			math/Math.o \
 						math/Matrix4x4.o \
 						math/Vector3.o \
 						math/Vector4.o
-OBJECTS = $(ENGINE) $(EXTERNAL_OBJECTS) $(GEOMETRY_OBJECTS) $(GUI_OBJECTS) $(TOOLS_OBJECTS) Core.o main.o
+UTILITY_OBJECTS =		utility/Settings.o
+
+OBJECTS = 	$(ENGINE) \
+			$(EXTERNAL_OBJECTS) \
+			$(GEOMETRY_OBJECTS) \
+			$(MATH_OBJECTS) \
+			$(UTILITY_OBJECTS) \
+			Core.o main.o
 
 #build tools
 COMPILER = g++

@@ -1,7 +1,7 @@
 #include "Core.hpp"
 
-#include <fstream>
 #include <iterator>
+#include <streambuf>
 
 std::string Object::class_name() const
 {
@@ -25,6 +25,40 @@ const char* Exception::what() const noexcept
 std::string Exception::message() const
 {
     return "Exception at " + m_source + ": " + m_message;
+}
+
+std::string get_line(std::istream& is)
+{
+    std::string rval;
+
+    // The characters in the stream are read one-by-one using a std::streambuf.
+    // That is faster than reading them one-by-one using the std::istream.
+    // Code that uses streambuf this way must be guarded by a sentry object.
+    // The sentry object performs various tasks,
+    // such as thread synchronization and updating the stream state.
+    // Adapted from: http://stackoverflow.com/a/6089413.
+
+    std::istream::sentry se(is, true);
+    std::streambuf* sb = is.rdbuf();
+
+    for(;;) {
+        int c = sb->sbumpc();
+        switch (c) {
+        case '\n':
+            return rval;
+        case '\r':
+            if(sb->sgetc() == '\n')
+                sb->sbumpc();
+            return rval;
+        case EOF:
+            // Also handle the case when the last line has no line ending
+            if(rval.empty())
+                is.setstate(std::ios::eofbit);
+            return rval;
+        default:
+            rval += (char)c;
+        }
+    }
 }
 
 std::vector<unsigned char> read_file(std::string file)

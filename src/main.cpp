@@ -176,6 +176,9 @@ int main2(int argc, char **argv)
 
 int main(int argv, char **argc)
 {
+    std::string str("0000=1111");
+    std::cout << "substr: " << str.substr(0, str.find_first_of("=")) << std::endl;
+    
     try
     {
         engine::initialize_engine();
