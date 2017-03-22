@@ -5,7 +5,7 @@
 #include <iostream>
 
 #include "Core.hpp"
-#include "engine/Engine.hpp"
+#include "engine/Bomberman.hpp"
 #include "engine/TextureCache.hpp"
 #include "engine/ShaderProgram.hpp"
 #include "geometry/Rectangle.hpp"
@@ -13,8 +13,8 @@
 #include "math/Matrix4x4.hpp"
 #include "extern/lodepng.h"
 #include "extern/gl_core_4_4.h"
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_opengl.h>
+//#include <SDL2/SDL.h>
+//#include <SDL2/SDL_opengl.h>
 
 using namespace math;
 using namespace engine;
@@ -176,18 +176,11 @@ int main2(int argc, char **argv)
 
 int main(int argv, char **argc)
 {
-    std::string str("0000=1111");
-    std::cout << "substr: " << str.substr(0, str.find_first_of("=")) << std::endl;
-    
     try
     {
-        engine::initialize_engine();
-        std::cout << std::endl;
-
-        engine::game_loop();
-        std::cout << std::endl;
         
-        engine::unload_engine();
+        Bomberman::instance().game_loop();
+
     }catch(Exception &e)
     {
         std::cout << e.message() << std::endl;

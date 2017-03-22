@@ -2,9 +2,9 @@
 EXECUTABLE = bomberman
 
 #parts
-ENGINE = 				engine/ShaderProgram.o \
-						engine/TextureCache.o \
-						engine/Engine.o
+ENGINE = 				engine/Bomberman.o \
+						engine/ShaderProgram.o \
+						engine/TextureCache.o 
 EXTERNAL_OBJECTS = 		extern/lodepng.o \
 						extern/gl_core_4_4.o
 GEOMETRY_OBJECTS = 		geometry/Point.o \
