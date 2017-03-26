@@ -2,9 +2,12 @@
 EXECUTABLE = bomberman
 
 #parts
-ENGINE = 				engine/Bomberman.o \
+ENGINE = 				engine/Actor.o \
+						engine/Bomberman.o \
 						engine/ShaderProgram.o \
 						engine/TextureCache.o 
+ENGINE_BOMERMAN =		engine/bomberman/Button.o \
+						engine/bomberman/MainMenu.o
 EXTERNAL_OBJECTS = 		extern/lodepng.o \
 						extern/gl_core_4_4.o
 GEOMETRY_OBJECTS = 		geometry/Point.o \
@@ -16,6 +19,7 @@ MATH_OBJECTS = 			math/Math.o \
 UTILITY_OBJECTS =		utility/Settings.o
 
 OBJECTS = 	$(ENGINE) \
+			$(ENGINE_BOMERMAN) \
 			$(EXTERNAL_OBJECTS) \
 			$(GEOMETRY_OBJECTS) \
 			$(MATH_OBJECTS) \

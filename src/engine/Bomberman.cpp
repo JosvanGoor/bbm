@@ -2,6 +2,9 @@
 
 #include <chrono>
 
+#include "Actor.hpp"
+#include "../math/Matrix4x4.hpp"
+
 namespace engine
 {
 
@@ -56,7 +59,8 @@ namespace engine
             while(lag >= m_tick_duration)
             {
                 /////////////////////////////////////// LOGIC UPDATES /////////////////////////////////////////
-                
+                m_active_room->logic_update();
+
                 lag -= m_tick_duration;
                 updates++;
                 m_current_engine_tick++;
@@ -66,8 +70,15 @@ namespace engine
             glClear(GL_COLOR_BUFFER_BIT);
 
             //----- rendering code -----
+            m_active_room->draw(0);
 
-            //goes here
+            Actor a;
+            a.position().x(100);
+            a.position().y(100);
+            a.position().width(256);
+            a.position().height(256);
+
+            a.draw(0.0);
 
             //----- rendering code -----
 
@@ -84,7 +95,7 @@ namespace engine
     // Convenience
     /////////////////////////////////////////////////////////////
 
-    //roomtick usefull?
+    void Bomberman::end_game() { m_game_loop_running = false; }
 
     void Bomberman::push_trigger(const std::string &key, const std::string &val)
     {
@@ -97,6 +108,25 @@ namespace engine
         if(it != m_triggers.end() && (m_current_engine_tick - maxdelay) <= it->second.first)
             return it->second;
         return std::make_pair((size_t)0, "");
+    }
+
+    void Bomberman::draw_quad(const Rectangle &pos, GLuint texture)
+    {
+        glBindVertexArray(m_quad_vao);
+        glBindBuffer(GL_ARRAY_BUFFER, m_quad_vbo);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture);
+
+        math::Matrix4x4<float> transform;
+        transform = transform.scale(pos.width(), pos.height(), 0);
+        transform = transform.translate(pos.x(), pos.y(), 0);
+
+        glUniformMatrix4fv(m_shloc_translation, 1, GL_FALSE, transform.data());
+        glUniformMatrix4fv(m_shloc_projection, 1, GL_FALSE, m_projection.data());
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+
+        glBindVertexArray(0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
     /////////////////////////////////////////////////////////////
@@ -119,8 +149,8 @@ namespace engine
     GLuint Bomberman::shloc_translation() const { return m_shloc_translation; }
     GLuint Bomberman::shloc_texture() const { return m_shloc_texture; }
 
-    size_t Bomberman::grid_width() const { return m_grid_width; }
-    size_t Bomberman::grid_heigt() const {return m_grid_height; }
+    size_t Bomberman::drawspace_width() const { return m_drawspace_width; }
+    size_t Bomberman::drawspace_heigt() const {return m_drawspace_height; }
 
     /////////////////////////////////////////////////////////////
     // (De)constructors & initializers
@@ -141,6 +171,10 @@ namespace engine
 
         windowing_setup();
         shader_setup();
+        basic_draw_setup();
+
+        std::cout << "Setting up mainmenu...\n";
+        m_active_room = new MainMenu();
 
         std::cout << "----- Bomberman engine initialization completed succesfully -----\n" << std::endl;
     }
@@ -177,6 +211,8 @@ namespace engine
         h = m_settings.as_int("screen_height");
 
         m_window_handle = SDL_CreateWindow("Bomberman v0.1", x, y, w, h, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
+        m_projection = math::orthographic_projection(0.0f, 1920.0f, 1080.0f, .0f, -1.0f, 1.0f);
+        m_drawspace_width = 1920; m_drawspace_height = 1080;
         if(!m_window_handle) throw Exception(__PRETTY_FUNCTION__, "could not create sdl window");
         std::cout << "    Created window...\n";
 
@@ -223,6 +259,44 @@ namespace engine
         m_shloc_texture = m_shader_program->uniform_location("tex");
         m_shloc_translation = m_shader_program->uniform_location("transform");
         std::cout << "    Retrieved shader's data locations, Shader setup complete!" << std::endl;
+    }
+
+    void Bomberman::basic_draw_setup()
+    {
+        std::cout << "Enable simple quad drawing...\n";
+
+        GLfloat floats[] = {0.0, 0.0, 0.0,      0.0, 0.0,
+                            1.0, 0.0, 0.0,      1.0, 0.0,
+                            0.0, 1.0, 0.0,      0.0, 1.0,
+                            1.0, 0.0, 0.0,      1.0, 0.0,
+                            1.0, 1.0, 0.0,      1.0, 1.0,
+                            0.0, 1.0, 0.0,      0.0, 1.0};
+        
+        std::cout << "Generating VAO...\n";
+        glGenVertexArrays(1, &m_quad_vao);
+        glBindVertexArray(m_quad_vao);
+        
+        std::cout << "Generate VBO...\n";
+        glGenBuffers(1, &m_quad_vbo);
+        glBindBuffer(GL_ARRAY_BUFFER, m_quad_vbo);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(floats), floats, GL_STATIC_DRAW);
+        std::cout << "VBO created and populated (vvvtt interleaved).\n";
+
+        std::cout << "Setting VAO draw info...\n";
+        glEnableVertexAttribArray(0);
+        glEnableVertexAttribArray(1);
+
+        int stride = (3 + 2) * sizeof(GLfloat);
+        void *voffset = (void*)0;
+        void *toffset = (void*)(3 * sizeof(GLfloat));
+
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, voffset);
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, stride, toffset);
+
+        glBindVertexArray(0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+        std::cout << "quad drawing setup finished." << std::endl;
     }
 
     void Bomberman::load_default_settings()

@@ -190,7 +190,7 @@ namespace math
             mult.m_data[6] = -(mult.m_data[9]);
             mult.m_data[10] = mult.m_data[5];
 
-            return (*this) * mult;
+            return mult * (*this);
         }
 
         //returns a version rotated t over the y axis. (uses float precision at best)
@@ -203,7 +203,7 @@ namespace math
             mult.m_data[2] = -(mult.m_data[8]);
             mult.m_data[10] = mult.m_data[0];
 
-            return (*this) * mult;
+            return mult * (*this);
         }
 
         //returns a version rotated t over the z axis. (uses float precision at best)
@@ -216,7 +216,7 @@ namespace math
             mult.m_data[1] = -(mult.m_data[4]);
             mult.m_data[5] = mult.m_data[0];
 
-            return (*this) * mult;
+            return mult * (*this);
         }
 
         //returns a scaled version
@@ -228,7 +228,7 @@ namespace math
             mult.m_data[5] = y;
             mult.m_data[10] = z;
 
-            return (*this) * mult;
+            return mult * (*this);
         }
 
         //returns a translated version
@@ -240,7 +240,7 @@ namespace math
             mult.m_data[13] = T(y);
             mult.m_data[14] = T(z);
 
-            return (*this) * mult;
+            return mult * (*this);
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////

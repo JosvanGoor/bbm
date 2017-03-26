@@ -27,13 +27,10 @@ namespace engine
     {
     public:
         Room() { };
-        ~virtual Room() { }
+        virtual ~Room() { }
 
-        virtual void process_inputs();
-
-        virtual Room* logic_update();
-
-        virtual void draw(double ahead);
+        virtual Room* logic_update() = 0;
+        virtual void draw(double ahead) = 0;
     };
 
 

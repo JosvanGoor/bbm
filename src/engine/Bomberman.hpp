@@ -9,12 +9,16 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
 
+#include "Room.hpp"
 #include "TextureCache.hpp"
 #include "ShaderProgram.hpp"
 #include "../math/Matrix4x4.hpp"
+#include "bomberman/MainMenu.hpp"
 #include "../utility/Settings.hpp"
+#include "../geometry/Rectangle.hpp"
 
 using utility::Settings;
+using geometry::Rectangle;
 
 namespace engine
 {
@@ -40,6 +44,10 @@ namespace engine
         void end_game();
         void push_trigger(const std::string &key, const std::string &message);
         std::pair<size_t, std::string> get_recent_trigger(std::string key, size_t maxdelay);
+        void draw_quad(const Rectangle &pos, GLuint texture);
+
+        //input sink
+        void default_input_action(SDL_Event *event); //implement
 
         //fuckton of setters/getters
         bool legacy_mode() const;
@@ -59,13 +67,17 @@ namespace engine
         GLuint shloc_translation() const;
         GLuint shloc_texture() const;
 
-        size_t grid_width() const;
-        size_t grid_heigt() const;
+        size_t drawspace_width() const;
+        size_t drawspace_heigt() const;
 
     private:
+        //current running room
+        Room *m_active_room;
+
         //initializer functions
         void windowing_setup();
         void shader_setup();
+        void basic_draw_setup(); //setup quad vao/vbo
 
         //some mode-flags
         bool m_legacy_mode;
@@ -88,24 +100,26 @@ namespace engine
         GLuint m_shloc_translation;
         GLuint m_shloc_texture;
 
+        //drawing stuff
+        GLuint m_quad_vao;
+        GLuint m_quad_vbo;
+        math::Matrix4x4<float> m_transform;
         math::Matrix4x4<float> m_projection;
-        size_t m_grid_width;
-        size_t m_grid_height;
+        
+        //draw grid size //drawspace rename?
+        size_t m_drawspace_width;
+        size_t m_drawspace_height;
 
         //System handles
         SDL_Window *m_window_handle;
         SDL_GLContext m_opengl_context;
 
-        //SDL_Window *window = nullptr;
-        //SDL_GLContext opengl_context;
-
+        //setting that lists default settings.
+        void load_default_settings();
 
         //constructors & copy prevention
         Bomberman();
         ~Bomberman();
-
-        //setting that lists default settings.
-        void load_default_settings();
 
         Bomberman(const Bomberman&) = delete;
         Bomberman(const Bomberman&&) = delete;

@@ -28,7 +28,7 @@ namespace engine
         std::vector<unsigned char> image;
         unsigned int error = lodepng::decode(image, width, height, file);
 
-        if(error != 0) throw Exception(__PRETTY_FUNCTION__, "failed to read image - " + std::string(lodepng_error_text(error)));
+        if(error != 0) throw Exception(__PRETTY_FUNCTION__, "failed to read image - " + std::string(lodepng_error_text(error)) + ", " + file);
 
         GLuint texture;
         glGenTextures(1, &texture);
