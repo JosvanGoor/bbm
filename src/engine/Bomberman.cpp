@@ -21,11 +21,15 @@ namespace engine
         auto current_time = std::chrono::high_resolution_clock::now();
         auto previous_time = std::chrono::high_resolution_clock::now();
         double lag = 0.0;
-
+        
         double in_this_second = 0.0;
         size_t updates = 0;
         size_t render_passes = 0;
-        std::cout << "Ended timing preparations, entering loop...\n";
+        std::cout << "Ended timing preparations...\n";
+
+        std::cout << "Setting up mainmenu...\n";
+        m_active_room = new MainMenu();
+        std::cout << "Finished final preparations, entering gameloop.\n";
 
         m_game_loop_running = true;
         while(m_game_loop_running)
@@ -46,20 +50,17 @@ namespace engine
             }
 
             /////////////////////////////////////// PROCESS INPUTS /////////////////////////////////////////
-            //VOOR NU EIGENLIJK MOETEN ROOMS ZELF INPUT PARSEN
-            SDL_Event event;
-            while(SDL_PollEvent(&event))
-            {
-                if(event.type == SDL_QUIT)
-                {
-                    m_game_loop_running = false;
-                }
-            }
+            m_active_room->process_events();
 
             while(lag >= m_tick_duration)
             {
                 /////////////////////////////////////// LOGIC UPDATES /////////////////////////////////////////
-                m_active_room->logic_update();
+                Room *buf = m_active_room->logic_update();
+                if(buf != nullptr) //swap room
+                {
+                    delete m_active_room;
+                    m_active_room = buf;
+                }
 
                 lag -= m_tick_duration;
                 updates++;
@@ -70,16 +71,7 @@ namespace engine
             glClear(GL_COLOR_BUFFER_BIT);
 
             //----- rendering code -----
-            m_active_room->draw(0);
-
-            Actor a;
-            a.position().x(100);
-            a.position().y(100);
-            a.position().width(256);
-            a.position().height(256);
-
-            a.draw(0.0);
-
+            m_active_room->draw(lag / m_tick_duration);
             //----- rendering code -----
 
             SDL_GL_SwapWindow(m_window_handle);
@@ -130,6 +122,17 @@ namespace engine
     }
 
     /////////////////////////////////////////////////////////////
+    // Event sink
+    /////////////////////////////////////////////////////////////
+
+    void Bomberman::event_sink(SDL_Event *event)
+    {
+        if(event->type == SDL_QUIT) end_game();
+
+        //TODO: manage resize etc.
+    }
+
+    /////////////////////////////////////////////////////////////
     // Setters & Getters
     /////////////////////////////////////////////////////////////
 
@@ -150,7 +153,7 @@ namespace engine
     GLuint Bomberman::shloc_texture() const { return m_shloc_texture; }
 
     size_t Bomberman::drawspace_width() const { return m_drawspace_width; }
-    size_t Bomberman::drawspace_heigt() const {return m_drawspace_height; }
+    size_t Bomberman::drawspace_height() const {return m_drawspace_height; }
 
     /////////////////////////////////////////////////////////////
     // (De)constructors & initializers
@@ -160,6 +163,8 @@ namespace engine
     {
         std::cout << "----- Bomberman engine starting initialization ------\n";
         m_game_loop_running = false;
+
+        SDL_Init(SDL_INIT_GAMECONTROLLER | SDL_INIT_VIDEO);
 
         std::cout << "Loading default settings set...\n";
         load_default_settings();
@@ -173,9 +178,6 @@ namespace engine
         shader_setup();
         basic_draw_setup();
 
-        std::cout << "Setting up mainmenu...\n";
-        m_active_room = new MainMenu();
-
         std::cout << "----- Bomberman engine initialization completed succesfully -----\n" << std::endl;
     }
 
@@ -185,6 +187,8 @@ namespace engine
 
         m_settings.save_to_file();
         std::cout << "Written settings to disk.\n";
+
+        delete m_active_room;
 
         m_texture_cache.clear();
         std::cout << "cleared all textures from memory.\n";
@@ -210,9 +214,13 @@ namespace engine
         w = m_settings.as_int("screen_width");
         h = m_settings.as_int("screen_height");
 
-        m_window_handle = SDL_CreateWindow("Bomberman v0.1", x, y, w, h, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
-        m_projection = math::orthographic_projection(0.0f, 1920.0f, 1080.0f, .0f, -1.0f, 1.0f);
-        m_drawspace_width = 1920; m_drawspace_height = 1080;
+        int flags = SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL;
+        if(m_settings.as_int("borderless")) flags |= SDL_WINDOW_BORDERLESS;
+        if(x == 0) x = y = SDL_WINDOWPOS_UNDEFINED;
+
+        m_window_handle = SDL_CreateWindow("Bomberman v0.1", x, y, w, h, flags);
+        m_projection = math::orthographic_projection(0.0f, (float)w, (float)h, .0f, -1.0f, 1.0f);
+        m_drawspace_width = w; m_drawspace_height = h;
         if(!m_window_handle) throw Exception(__PRETTY_FUNCTION__, "could not create sdl window");
         std::cout << "    Created window...\n";
 
@@ -306,5 +314,7 @@ namespace engine
         m_settings.set("screen_y", "200");
         m_settings.set("screen_width", "1366");
         m_settings.set("screen_height", "768");
+        m_settings.set("borderless", "1");
+        m_settings.set("controller_deadzone", "0.15");
     }
 }

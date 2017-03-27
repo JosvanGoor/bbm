@@ -1,5 +1,10 @@
 # bbm
 
+### NOTES
+Gamerooms should just pass the controls to the eventsync so that it can keep the controllers up to date.
+
+JE LEAKT ERGENS 1 POINTER.
+
 ### valgrind report
 Valgrind currently reports on memory leaks, these are originating in the X11 and SDL2 frameworks and cannot be handeled.
 Should it look different then below the leaks are introduced by me:

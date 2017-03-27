@@ -30,6 +30,7 @@ namespace engine
         virtual ~Room() { }
 
         virtual Room* logic_update() = 0;
+        virtual void process_events() = 0; //redirect unused events to input_sink.
         virtual void draw(double ahead) = 0;
     };
 

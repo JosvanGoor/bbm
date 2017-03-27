@@ -43,11 +43,12 @@ namespace engine
         //convenience functions
         void end_game();
         void push_trigger(const std::string &key, const std::string &message);
+        //returns [0, ""] when no such key can be found
         std::pair<size_t, std::string> get_recent_trigger(std::string key, size_t maxdelay);
         void draw_quad(const Rectangle &pos, GLuint texture);
 
         //input sink
-        void default_input_action(SDL_Event *event); //implement
+        void event_sink(SDL_Event *event); //manages events room doesnt want to deal with
 
         //fuckton of setters/getters
         bool legacy_mode() const;
@@ -60,7 +61,6 @@ namespace engine
         Settings& settings();
         TextureCache& texture_cache();
         
-        //returns [0, ""] when no such key can be found
         std::map<std::string, std::pair<size_t, std::string>>& triggers();
 
         GLuint shloc_projection() const;
@@ -68,7 +68,7 @@ namespace engine
         GLuint shloc_texture() const;
 
         size_t drawspace_width() const;
-        size_t drawspace_heigt() const;
+        size_t drawspace_height() const;
 
     private:
         //current running room

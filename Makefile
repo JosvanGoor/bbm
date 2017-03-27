@@ -1,9 +1,11 @@
 #Makefile for the bomberman project
-EXECUTABLE = bomberman
+EXECUTABLE = bombman
 
 #parts
 ENGINE = 				engine/Actor.o \
 						engine/Bomberman.o \
+						engine/Controllers.o \
+						engine/Room.o \
 						engine/ShaderProgram.o \
 						engine/TextureCache.o 
 ENGINE_BOMERMAN =		engine/bomberman/Button.o \
@@ -40,8 +42,7 @@ endif
 #direcory structure
 SOURCE_DIRECTORY = src
 BUILD_DIRECTORY = build
-DEPENDENCY_DIRECTORY = $(BUILD_DIRECTORY)/dependencies
-STRUCTURE_FLAG = $(DEPENDENCY_DIRECTORY)/structure.flag
+STRUCTURE_FLAG = $(BUILD_DIRECTORY)/structure.flag
 
 $(EXECUTABLE): $(STRUCTURE_FLAG) $(addprefix $(BUILD_DIRECTORY)/,$(OBJECTS))
 	$(COMPILER) $(FLAGS) $(addprefix $(BUILD_DIRECTORY)/, $(OBJECTS)) -o $@ $(LIBRARIES)
@@ -52,7 +53,7 @@ $(EXECUTABLE): $(STRUCTURE_FLAG) $(addprefix $(BUILD_DIRECTORY)/,$(OBJECTS))
 #build folder structure when flag is not set
 $(STRUCTURE_FLAG):
 	mkdir -p $(filter-out %./,$(addprefix $(BUILD_DIRECTORY)/,$(dir $(OBJECTS))))
-	mkdir -p $(filter-out %./,$(addprefix $(DEPENDENCY_DIRECTORY)/,$(dir $(OBJECTS))))
+	mkdir -p $(filter-out %./,$(addprefix $(BUILD_DIRECTORY)/,$(dir $(OBJECTS))))
 	touch $(STRUCTURE_FLAG)
 
 #remove all non-source files
@@ -82,4 +83,4 @@ fullvalgrind: $(EXECUTABLE)
 #compile objects rule
 $(BUILD_DIRECTORY)/%.o: $(SOURCE_DIRECTORY)/%.cpp
 	$(COMPILER) $(FLAGS) -o $@ -c $<
-	$(COMPILER) -MM -MT $(BUILD_DIRECTORY)/$*.o src/$*.cpp > $(DEPENDENCY_DIRECTORY)/$*.d
+	$(COMPILER) -MM -MT $(BUILD_DIRECTORY)/$*.o src/$*.cpp > $(BUILD_DIRECTORY)/$*.d
