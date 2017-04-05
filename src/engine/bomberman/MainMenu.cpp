@@ -45,7 +45,7 @@ namespace engine
                     m_last_click = Point(event.button.x, event.button.y);
                     break;
                 default:
-                    Bomberman::instance().event_sink(&event);
+                    Bomberman::instance().event_sink(event);
             }
             
         }

@@ -25,11 +25,21 @@ namespace engine
         double in_this_second = 0.0;
         size_t updates = 0;
         size_t render_passes = 0;
+        m_last_fps = m_last_lps = 0;
         std::cout << "Ended timing preparations...\n";
 
         std::cout << "Setting up mainmenu...\n";
         m_active_room = new MainMenu();
         std::cout << "Finished final preparations, entering gameloop.\n";
+
+        /*
+            TESTSPOT
+        */
+        std::cout << "stretch 0 - 50 - 100 [-1 1]: " << math::stretch(50, 0, 100, -1, 1) << std::endl;
+        std::cout << "s2g 125:64, 135:64: " << math::snap_to_grid(125, 64) << ", " << math::snap_to_grid(135, 64) << std::endl;
+        /*
+            TESTSPOT
+        */
 
         m_game_loop_running = true;
         while(m_game_loop_running)
@@ -44,6 +54,9 @@ namespace engine
             {
                 
                 std::cout << "\rfps / logic - " << render_passes << " / " << updates << std::flush; 
+                
+                m_last_fps = render_passes;
+                m_last_lps = updates;
 
                 updates = render_passes = 0;
                 in_this_second -= 1000;
@@ -61,6 +74,13 @@ namespace engine
                     delete m_active_room;
                     m_active_room = buf;
                 }
+
+                //TEST REMOVE THIS
+                //std::cout << "KB1: " << m_keyboard_1->state_to_string() << std::endl;
+                //std::cout << "GP1: " << m_gamepad_1->state_to_string() << std::endl;
+                //std::cout << "GP2: " << m_gamepad_2->state_to_string() << std::endl;
+                //std::cout << "GP3: " << m_gamepad_3->state_to_string() << std::endl;
+                //std::cout << "GP4: " << m_gamepad_4->state_to_string() << std::endl;
 
                 lag -= m_tick_duration;
                 updates++;
@@ -121,14 +141,70 @@ namespace engine
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
+    Controller* Bomberman::controller(NamedController nc)
+    {
+        switch(nc)
+        {
+            case GAMEPAD_1: return m_gamepad_1;
+            case GAMEPAD_2: return m_gamepad_2;
+            case GAMEPAD_3: return m_gamepad_3;
+            case GAMEPAD_4: return m_gamepad_4;
+            case KEYBOARD_1: return m_keyboard_1;
+            default:
+                throw Exception(__PRETTY_FUNCTION__, "Requested controller slot not available");
+        }
+    }
+
     /////////////////////////////////////////////////////////////
     // Event sink
     /////////////////////////////////////////////////////////////
 
-    void Bomberman::event_sink(SDL_Event *event)
+    void Bomberman::event_sink(const SDL_Event &event)
     {
-        if(event->type == SDL_QUIT) end_game();
-
+        switch(event.type)
+        {
+            case SDL_QUIT:
+                end_game();
+                break;
+            case SDL_KEYDOWN:
+            case SDL_KEYUP:
+                m_keyboard_1->update(event);
+                break;
+            case SDL_CONTROLLERAXISMOTION:
+            case SDL_CONTROLLERBUTTONDOWN:
+            case SDL_CONTROLLERBUTTONUP:
+            case SDL_CONTROLLERDEVICEREMOVED:
+                m_gamepad_1->update(event);
+                m_gamepad_2->update(event);
+                m_gamepad_3->update(event);
+                m_gamepad_4->update(event);
+                break;
+            case SDL_CONTROLLERDEVICEADDED:
+                if(!m_gamepad_1->connected()) 
+                {
+                    delete m_gamepad_1;
+                    m_gamepad_1 = new GamepadController(SDL_GameControllerOpen(event.cdevice.which));
+                    std::cout << "\nNew controller mapped to location 1...\n";
+                }
+                else if(!m_gamepad_2->connected()) 
+                {
+                    delete m_gamepad_2;
+                    m_gamepad_2 = new GamepadController(SDL_GameControllerOpen(event.cdevice.which));
+                    std::cout << "\nNew controller mapped to location 2...\n";
+                }
+                else if(!m_gamepad_3->connected()) 
+                {
+                    delete m_gamepad_3;
+                    m_gamepad_3 = new GamepadController(SDL_GameControllerOpen(event.cdevice.which));
+                    std::cout << "\nNew controller mapped to location 3...\n";
+                }
+                else if(!m_gamepad_4->connected()) 
+                {
+                    delete m_gamepad_4;
+                    m_gamepad_4 = new GamepadController(SDL_GameControllerOpen(event.cdevice.which));
+                    std::cout << "\nNew controller mapped to location 4...\n";
+                }
+        }
         //TODO: manage resize etc.
     }
 
@@ -140,6 +216,8 @@ namespace engine
     bool Bomberman::legacy_mode() const { return m_legacy_mode; }
     bool Bomberman::game_loop_running() const { return m_game_loop_running; }
     size_t Bomberman::tick_rate() const { return m_tick_rate; }
+    size_t Bomberman::last_fps() const { return m_last_fps; }
+    size_t Bomberman::last_lps() const { return m_last_lps; }
     size_t Bomberman::start_room_tick() const { return m_start_room_tick; }
     size_t Bomberman::current_engine_tick() const { return m_current_engine_tick; }
 
@@ -165,6 +243,7 @@ namespace engine
         m_game_loop_running = false;
 
         SDL_Init(SDL_INIT_GAMECONTROLLER | SDL_INIT_VIDEO);
+        //SDL_GameControllerEventState(SDL_ENABLE);
 
         std::cout << "Loading default settings set...\n";
         load_default_settings();
@@ -173,6 +252,13 @@ namespace engine
 
         std::cout << "Setting tickrate to 40\n";
         m_tick_rate = 40;
+
+        std::cout << "Initial setup for controllers...\n";
+        m_gamepad_1 = new GamepadController();
+        m_gamepad_2 = new GamepadController();
+        m_gamepad_3 = new GamepadController();
+        m_gamepad_4 = new GamepadController();
+        m_keyboard_1 = new KeyboardController(m_settings.as_string("keyboard_map_0"));
 
         windowing_setup();
         shader_setup();
@@ -185,11 +271,17 @@ namespace engine
     {
         std::cout << "----- Started to unload the engine -----\n";
 
+        m_settings.set("keyboard_map_0", m_keyboard_1->mapping());
         m_settings.save_to_file();
         std::cout << "Written settings to disk.\n";
 
         delete m_active_room;
 
+        delete m_gamepad_1;
+        delete m_gamepad_2;
+        delete m_gamepad_3;
+        delete m_gamepad_4;
+        
         m_texture_cache.clear();
         std::cout << "cleared all textures from memory.\n";
 
@@ -232,7 +324,7 @@ namespace engine
         std::cout << "    Loaded openGL functions and extentions...\n";
 
         SDL_GL_SetSwapInterval(m_settings.as_int("vsyncmode")); //disable vsync
-        std::cout << "    Disabled vertical sync...\nWindow setup complete!" << std::endl;
+        std::cout << "    Set vertical sync state...\nWindow setup complete!" << std::endl;
     }
 
     void Bomberman::shader_setup()
@@ -290,7 +382,7 @@ namespace engine
         glBufferData(GL_ARRAY_BUFFER, sizeof(floats), floats, GL_STATIC_DRAW);
         std::cout << "VBO created and populated (vvvtt interleaved).\n";
 
-        std::cout << "Setting VAO draw info...\n";
+        std::cout << "Setting VAO parameters...\n";
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
 
@@ -304,7 +396,7 @@ namespace engine
         glBindVertexArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-        std::cout << "quad drawing setup finished." << std::endl;
+        std::cout << "quad setup finished." << std::endl;
     }
 
     void Bomberman::load_default_settings()
@@ -316,5 +408,6 @@ namespace engine
         m_settings.set("screen_height", "768");
         m_settings.set("borderless", "1");
         m_settings.set("controller_deadzone", "0.15");
+        m_settings.set("keyboard_map_0", "1073741920,1073741917,1073741916,1073741918,13,27,1073742052,1073742054,32,120,113,112,101,114,121,117,1073741906,1073741905,1073741904,1073741903,119,115,97,100");
     }
 }

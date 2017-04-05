@@ -14,17 +14,60 @@ std::ostream& operator<<(std::ostream &os, const Object &obj)
     return os;
 }
 
-Exception::Exception() : m_source("unknown"), m_message("no message") {}
-Exception::Exception(const std::string &source, const std::string &message) : m_source(source), m_message(message) {}
+Exception::Exception() : m_message("no message") {}
+Exception::Exception(const std::string &source, const std::string &message)
+ : m_message("Exception at " + source + ": " + message) {}
 
 const char* Exception::what() const noexcept
 {
-    return message().c_str();
+    return m_message.c_str();
 }
 
 std::string Exception::message() const
 {
-    return "Exception at " + m_source + ": " + m_message;
+    return m_message;
+}
+
+std::string trim(const std::string &str)
+{
+    return trim_front(trim_back(str));
+}
+
+std::string trim_front(const std::string &str)
+{
+    if(str.size() == 0) return "";
+    return str.substr(str.find_first_not_of(" \t\n\r"), str.size());
+}
+
+std::string trim_back(const std::string &str)
+{
+    if(str.size() == 0) return "";
+    return str.substr(0, str.find_last_not_of(" \t\n\r") + 1);
+}
+
+std::vector<std::string> split(const std::string &str, char s)
+{
+    size_t pos = 0;
+    std::vector<std::string> rval;
+
+    while(true)
+    {
+        size_t pos2 = str.find_first_of(s, pos);
+
+        if(pos2 == std::string::npos) //if end of line
+        {
+            //push final result, break
+            rval.push_back(str.substr(pos, pos2));
+            break;
+        }
+
+        //push part and increment past the splitchar.
+        rval.push_back(str.substr(pos, pos2 - pos));
+        pos = pos2 + 1;
+    }
+
+    rval.shrink_to_fit();
+    return rval;
 }
 
 std::string get_line(std::istream& is)

@@ -1,7 +1,10 @@
 #ifndef ENGINE_CONTROLLERS_HPP
 #define ENGINE_CONTROLLERS_HPP
 
+#include <string>
 #include <SDL2/SDL.h>
+
+#define MAX_CONTROLLER_RANGE 32768
 
 namespace engine
 {
@@ -51,6 +54,8 @@ namespace engine
         virtual ~Controller() { };
 
         char type() const; //returns controller type
+        int player() const; //returns whether controller is used.
+        void player(int player);
         bool connected() const; //returns false when the controller lost connection.
         virtual void update(const SDL_Event &event) = 0; //updates state
 
@@ -82,11 +87,14 @@ namespace engine
         bool rs() const; //right stick button
         bool ls() const; //left stick button
 
+        std::string state_to_string() const;
+
     protected:
         //state variables.
         char m_type; //controller type. 0 = none, ''
         double m_rt;
         double m_lt;
+        int m_player; //whether controller is linked to a player
         bool m_connected;
         bool m_buttons[14];
         double m_main_stick_x;
@@ -98,13 +106,15 @@ namespace engine
     class GamepadController : public Controller
     {
     public:
-        GamepadController(SDL_JoystickID id);
-        ~GamepadController() { };
+        GamepadController(); //disconnected controller
+        GamepadController(SDL_GameController *controller);
+        ~GamepadController() { if(m_controller) SDL_GameControllerClose(m_controller); };
 
         virtual void update(const SDL_Event &event);
 
     protected:
-        double m_deadzone;
+        int m_deadzone;
+        SDL_GameController *m_controller;
         SDL_JoystickID m_jid;
     };
 
@@ -112,6 +122,11 @@ namespace engine
     {
     public:
         KeyboardController(); //only default mapping atm.
+        KeyboardController(const std::string &mapping);
+
+        
+        std::string mapping() const; //returns mapping as string.
+        void map_key(ControllerKey ck, SDL_Keycode kc);
 
         virtual void update(const SDL_Event &event);
     protected:

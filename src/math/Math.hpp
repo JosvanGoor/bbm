@@ -38,6 +38,9 @@ namespace math
         return ((int)t) * gs;
     }
 
+    int snap_to_grid(int val, int grid);
+    double stretch(double val, double min, double max, double newmin = 0.0, double newmax = 1.0);
+
     //overloaded macro for closest cmath-cos/sin/tan implementation
     int cos(int i);
     long cos(long l);
