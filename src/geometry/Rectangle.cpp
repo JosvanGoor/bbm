@@ -28,7 +28,7 @@ namespace geometry
     bool Rectangle::contains(const Point &p)
     {
         if(p.x() < m_x || p.x() > (m_x + m_width)) return false;
-        if(p.y() < m_y || p.y() > (m_y + m_width)) return false;
+        if(p.y() < m_y || p.y() > (m_y + m_height)) return false;
         return true;
     }
 

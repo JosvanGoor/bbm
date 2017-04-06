@@ -12,13 +12,16 @@ namespace engine
     {
     public:
         TextureCache() = default;
-        TextureCache(const TextureCache &tc) = delete;
+        TextureCache(const TextureCache&) = delete;
+        TextureCache(const TextureCache&&) = delete;
        ~TextureCache();
 
         bool has_texture(const std::string &file);
-        GLuint get_texture(const std::string &file) ;
+        GLuint get_texture(const std::string &file);
         GLuint load_texture(const std::string &file);
         void remove_texture(const std::string &file);
+
+        GLuint load_nonscaling_texture(const std::string &file);
 
         size_t size() const; //returns number of loaded textures.
         void clear(); //removes all textures.

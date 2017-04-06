@@ -6,6 +6,7 @@
 #include <fstream>
 #include <iostream>
 #include <typeinfo>
+#include <algorithm>
 #include <exception>
 #include "extern/gl_core_4_4.h"
 
@@ -34,10 +35,12 @@ protected:
 std::string trim(const std::string &str);
 std::string trim_front(const std::string &str);
 std::string trim_back(const std::string &str);
+std::string to_uppercase(const std::string &str);
 
 std::vector<std::string> split(const std::string &str, char s);
 
 std::string get_line(std::istream &is);
+std::string get_noncomment_line(std::istream &is, std::string commentstart = "#");
 std::vector<unsigned char> read_file(std::string file);
 
 void print_if_opengl_error(std::string msg);

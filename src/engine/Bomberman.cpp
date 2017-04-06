@@ -28,18 +28,21 @@ namespace engine
         m_last_fps = m_last_lps = 0;
         std::cout << "Ended timing preparations...\n";
 
+        std::cout << "Loading default font...\n";
+        m_font = new Font("textures/font");
+
+        RenderableString *fps_count = m_font->renderable_string(to_uppercase("LPS/FPS: ?/?"));
+        {
+            math::Matrix4x4<float> mat;
+            mat = mat.translate((float)1, m_drawspace_height - 17.0f, (float)0);
+            fps_count->transform(mat);
+        } //mat gets removed from stack.
+        std::cout << "Finished setting up fps-counter...\n";
+
         std::cout << "Setting up mainmenu...\n";
         m_active_room = new MainMenu();
         std::cout << "Finished final preparations, entering gameloop.\n";
 
-        /*
-            TESTSPOT
-        */
-        std::cout << "stretch 0 - 50 - 100 [-1 1]: " << math::stretch(50, 0, 100, -1, 1) << std::endl;
-        std::cout << "s2g 125:64, 135:64: " << math::snap_to_grid(125, 64) << ", " << math::snap_to_grid(135, 64) << std::endl;
-        /*
-            TESTSPOT
-        */
 
         m_game_loop_running = true;
         while(m_game_loop_running)
@@ -54,6 +57,7 @@ namespace engine
             {
                 
                 std::cout << "\rfps / logic - " << render_passes << " / " << updates << std::flush; 
+                m_font->renderable_string(fps_count, to_uppercase("LPS/FPS: " + std::to_string(updates) + "/" + std::to_string(render_passes)));
                 
                 m_last_fps = render_passes;
                 m_last_lps = updates;
@@ -94,6 +98,9 @@ namespace engine
             m_active_room->draw(lag / m_tick_duration);
             //----- rendering code -----
 
+            //----- Draw fps counter -----
+            fps_count->draw();
+
             SDL_GL_SwapWindow(m_window_handle);
 
             //std::this_thread::sleep_for(std::chrono::milliseconds(50));
@@ -133,6 +140,7 @@ namespace engine
         transform = transform.scale(pos.width(), pos.height(), 0);
         transform = transform.translate(pos.x(), pos.y(), 0);
 
+        glUniform3f(m_shloc_color_filter, 1.0, 1.0, 1.0); //always bind white here
         glUniformMatrix4fv(m_shloc_translation, 1, GL_FALSE, transform.data());
         glUniformMatrix4fv(m_shloc_projection, 1, GL_FALSE, m_projection.data());
         glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -184,25 +192,25 @@ namespace engine
                 {
                     delete m_gamepad_1;
                     m_gamepad_1 = new GamepadController(SDL_GameControllerOpen(event.cdevice.which));
-                    std::cout << "\nNew controller mapped to location 1...\n";
+                    std::cout << "\rNew controller mapped to location 1...\n";
                 }
                 else if(!m_gamepad_2->connected()) 
                 {
                     delete m_gamepad_2;
                     m_gamepad_2 = new GamepadController(SDL_GameControllerOpen(event.cdevice.which));
-                    std::cout << "\nNew controller mapped to location 2...\n";
+                    std::cout << "\rNew controller mapped to location 2...\n";
                 }
                 else if(!m_gamepad_3->connected()) 
                 {
                     delete m_gamepad_3;
                     m_gamepad_3 = new GamepadController(SDL_GameControllerOpen(event.cdevice.which));
-                    std::cout << "\nNew controller mapped to location 3...\n";
+                    std::cout << "\rNew controller mapped to location 3...\n";
                 }
                 else if(!m_gamepad_4->connected()) 
                 {
                     delete m_gamepad_4;
                     m_gamepad_4 = new GamepadController(SDL_GameControllerOpen(event.cdevice.which));
-                    std::cout << "\nNew controller mapped to location 4...\n";
+                    std::cout << "\rNew controller mapped to location 4...\n";
                 }
         }
         //TODO: manage resize etc.
@@ -221,14 +229,20 @@ namespace engine
     size_t Bomberman::start_room_tick() const { return m_start_room_tick; }
     size_t Bomberman::current_engine_tick() const { return m_current_engine_tick; }
 
+    Font* Bomberman::font() { return m_font; }
     Settings& Bomberman::settings() { return m_settings; }
     TextureCache& Bomberman::texture_cache() { return m_texture_cache; }
     std::map<std::string, std::pair<size_t, std::string>>& Bomberman::triggers()
         { return m_triggers; }
 
+    GLuint Bomberman::quad_vao() const { return m_quad_vao; }
+    GLuint Bomberman::quad_vbo() const { return m_quad_vbo; }
     GLuint Bomberman::shloc_projection() const { return m_shloc_projection; }
     GLuint Bomberman::shloc_translation() const { return m_shloc_translation; }
     GLuint Bomberman::shloc_texture() const { return m_shloc_texture; }
+    GLuint Bomberman::shloc_color_filter() const { return m_shloc_color_filter; }
+
+    math::Matrix4x4<float> Bomberman::projection() const { return m_projection; }
 
     size_t Bomberman::drawspace_width() const { return m_drawspace_width; }
     size_t Bomberman::drawspace_height() const {return m_drawspace_height; }
@@ -276,14 +290,19 @@ namespace engine
         std::cout << "Written settings to disk.\n";
 
         delete m_active_room;
+        std::cout << "released running resources...\n";
 
         delete m_gamepad_1;
         delete m_gamepad_2;
         delete m_gamepad_3;
         delete m_gamepad_4;
-        
+        std::cout << "Cleared gamepad hooks...\n";
+
+        delete m_font;
+        std::cout << "Deleted default font...\n";
+
         m_texture_cache.clear();
-        std::cout << "cleared all textures from memory.\n";
+        std::cout << "Cleared all textures from memory.\n";
 
         delete m_shader_program;
         std::cout << "Marked shader program for deconstruction.\n";
@@ -293,6 +312,7 @@ namespace engine
         SDL_Quit();
         std::cout << "Destroyed sdl window and quit environment\n";
 
+        std::cout << "Runtime: " << m_current_engine_tick << " ticks.\n";
         std::cout << "----- finished unloading engine -----" << std::endl;
     }
 
@@ -322,6 +342,9 @@ namespace engine
 
         if(ogl_LoadFunctions() == ogl_LOAD_FAILED) throw Exception(__PRETTY_FUNCTION__, "failed to load opengl extentions (version 4.4 requested)");
         std::cout << "    Loaded openGL functions and extentions...\n";
+
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         SDL_GL_SetSwapInterval(m_settings.as_int("vsyncmode")); //disable vsync
         std::cout << "    Set vertical sync state...\nWindow setup complete!" << std::endl;
@@ -358,6 +381,7 @@ namespace engine
         m_shloc_projection = m_shader_program->uniform_location("ortho");
         m_shloc_texture = m_shader_program->uniform_location("tex");
         m_shloc_translation = m_shader_program->uniform_location("transform");
+        m_shloc_color_filter = m_shader_program->uniform_location("cfilter");
         std::cout << "    Retrieved shader's data locations, Shader setup complete!" << std::endl;
     }
 
@@ -372,17 +396,17 @@ namespace engine
                             1.0, 1.0, 0.0,      1.0, 1.0,
                             0.0, 1.0, 0.0,      0.0, 1.0};
         
-        std::cout << "Generating VAO...\n";
+        std::cout << "    Generating VAO...\n";
         glGenVertexArrays(1, &m_quad_vao);
         glBindVertexArray(m_quad_vao);
         
-        std::cout << "Generate VBO...\n";
+        std::cout << "    Generate VBO...\n";
         glGenBuffers(1, &m_quad_vbo);
         glBindBuffer(GL_ARRAY_BUFFER, m_quad_vbo);
         glBufferData(GL_ARRAY_BUFFER, sizeof(floats), floats, GL_STATIC_DRAW);
-        std::cout << "VBO created and populated (vvvtt interleaved).\n";
+        std::cout << "    VBO created and populated (vvvtt interleaved).\n";
 
-        std::cout << "Setting VAO parameters...\n";
+        std::cout << "    Setting VAO parameters...\n";
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
 

@@ -5,6 +5,7 @@ EXECUTABLE = bombman
 ENGINE = 				engine/Actor.o \
 						engine/Bomberman.o \
 						engine/Controllers.o \
+						engine/Font.o \
 						engine/Room.o \
 						engine/ShaderProgram.o \
 						engine/TextureCache.o 

@@ -9,6 +9,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
 
+#include "Font.hpp"
 #include "Room.hpp"
 #include "Controllers.hpp"
 #include "TextureCache.hpp"
@@ -67,7 +68,7 @@ namespace engine
 
         Controller *controller(NamedController nc); //returns selected controller.
 
-        //input sink
+        //input sink (should receive ALL keyboard and gamecontroller events)
         void event_sink(const SDL_Event &event); //manages events room doesnt want to deal with
 
         //fuckton of setters/getters
@@ -80,14 +81,21 @@ namespace engine
         size_t start_room_tick() const;
         size_t current_engine_tick() const;
 
+        Font* font();
         Settings& settings();
         TextureCache& texture_cache();
         
         std::map<std::string, std::pair<size_t, std::string>>& triggers();
 
+        GLuint quad_vao() const;
+        GLuint quad_vbo() const;
+
         GLuint shloc_projection() const;
         GLuint shloc_translation() const;
         GLuint shloc_texture() const;
+        GLuint shloc_color_filter() const;
+
+        math::Matrix4x4<float> projection() const;
 
         size_t drawspace_width() const;
         size_t drawspace_height() const;
@@ -112,7 +120,9 @@ namespace engine
         size_t m_last_lps; //logic updates previous second
         size_t m_current_engine_tick;
         size_t m_start_room_tick;
+        
         //caches
+        Font *m_font;
         Settings m_settings;
         TextureCache m_texture_cache;
         std::map<std::string, std::pair<size_t, std::string>> m_triggers;
@@ -126,9 +136,10 @@ namespace engine
 
         //projection & shaders
         ShaderProgram *m_shader_program;
+        GLuint m_shloc_texture;
         GLuint m_shloc_projection;
         GLuint m_shloc_translation;
-        GLuint m_shloc_texture;
+        GLuint m_shloc_color_filter;
 
         //drawing stuff
         GLuint m_quad_vao;

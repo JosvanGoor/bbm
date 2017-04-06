@@ -60,6 +60,10 @@ namespace math
             return rval;
         }
 
+        T x() const { return m_x; }
+        T y() const { return m_y; }
+        T z() const { return m_z; }
+
         //Returns the length of this vector.
         T length() const
         {

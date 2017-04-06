@@ -45,6 +45,17 @@ std::string trim_back(const std::string &str)
     return str.substr(0, str.find_last_not_of(" \t\n\r") + 1);
 }
 
+std::string to_uppercase(const std::string &str)
+{
+    std::string rval;
+    rval.reserve(str.size());
+
+    for(size_t i = 0; i < str.size(); ++i)
+        rval += toupper(str[i]);
+    
+    return rval;
+}
+
 std::vector<std::string> split(const std::string &str, char s)
 {
     size_t pos = 0;
@@ -102,6 +113,16 @@ std::string get_line(std::istream& is)
             rval += (char)c;
         }
     }
+}
+
+std::string get_noncomment_line(std::istream &is, std::string commentstart)
+{
+    std::string rval = get_line(is);
+    while(std::equal(commentstart.begin(), commentstart.end(), rval.begin()))
+    {
+        rval = get_line(is);
+    }
+    return rval;
 }
 
 std::vector<unsigned char> read_file(std::string file)
