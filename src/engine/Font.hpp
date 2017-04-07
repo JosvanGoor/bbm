@@ -74,10 +74,11 @@ namespace engine
     protected:
         friend class Font;
         RenderableString() 
-            : m_height(0), m_width(0), m_texture(0), m_vertex_buffer(0), m_string(""), m_color(), m_transform() { };
+            : m_height(0), m_width(0), m_triangles(0), m_texture(0), m_vertex_buffer(0), m_string(""), m_color(), m_transform() { };
 
         size_t m_height;
         size_t m_width;
+        size_t m_triangles;
         
         GLuint m_texture;
         GLuint m_vertex_array;

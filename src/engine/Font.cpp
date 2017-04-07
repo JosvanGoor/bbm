@@ -45,6 +45,7 @@ namespace engine
         std::vector<GLfloat> floats;
         floats.reserve(str.length() * 2 * 5 * 3);
 
+        size_t triangles = 0;
         float advance = 0;
         float ypos = 0;
         float tex_width = 1.0 / m_sheet_width;
@@ -80,11 +81,13 @@ namespace engine
             floats.insert(floats.end(), {advance, ypos + spr_height, 0,            tex_x, tex_y + tex_height});
 
             advance += m_advance + widths[cindex];
+            triangles += 2;
         }
 
         RenderableString *rs = new RenderableString();
         rs->m_height = m_sprite_height;
         rs->m_width = advance;
+        rs->m_triangles = triangles;
         rs->m_texture = m_texture;
         rs->m_string = str;
         rs->m_color = math::Vector3<float>(1.0, 1.0, 1.0);
@@ -119,6 +122,7 @@ namespace engine
         std::vector<GLfloat> floats;
         floats.reserve(str.length() * 2 * 5 * 3);
 
+        size_t triangles = 0;
         float advance = 0;
         float ypos = 0;
         float tex_width = 1.0 / m_sheet_width;
@@ -154,6 +158,7 @@ namespace engine
             floats.insert(floats.end(), {advance, ypos + spr_height, 0,            tex_x, tex_y + tex_height});
 
             advance += m_advance + widths[cindex];
+            triangles += 2;
         }
 
         glBindBuffer(GL_ARRAY_BUFFER, rs->m_vertex_buffer);
@@ -161,6 +166,7 @@ namespace engine
 
         rs->m_height = m_sprite_height;
         rs->m_width = advance;
+        rs->m_triangles = triangles;
         rs->m_texture = m_texture;
         rs->m_string = str;
     }
@@ -207,13 +213,18 @@ namespace engine
         glUniformMatrix4fv(Bomberman::instance().shloc_translation(), 1, GL_FALSE, m_transform.data());
         glUniformMatrix4fv(Bomberman::instance().shloc_projection(), 1, GL_FALSE, Bomberman::instance().projection().data());
         
-        glDrawArrays(GL_TRIANGLES, 0, 2 * 3 * m_string.size());
+        glDrawArrays(GL_TRIANGLES, 0, 3 * m_triangles);
 
         glBindVertexArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
     //spul
+
+    void RenderableString::color(const math::Vector3<float> &color)
+    {
+        m_color = color;
+    }
 
     void RenderableString::transform(const math::Matrix4x4<float> &tf)
     {

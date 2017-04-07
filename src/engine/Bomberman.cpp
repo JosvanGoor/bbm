@@ -36,6 +36,7 @@ namespace engine
             math::Matrix4x4<float> mat;
             mat = mat.translate((float)1, m_drawspace_height - 17.0f, (float)0);
             fps_count->transform(mat);
+            fps_count->color(math::Vector3<float>(0.0, 1.0, 0.0));
         } //mat gets removed from stack.
         std::cout << "Finished setting up fps-counter...\n";
 
@@ -91,7 +92,7 @@ namespace engine
                 m_current_engine_tick++;
             }
 
-            glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+            glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
             glClear(GL_COLOR_BUFFER_BIT);
 
             //----- rendering code -----
