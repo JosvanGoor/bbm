@@ -92,7 +92,8 @@ namespace engine
                 m_current_engine_tick++;
             }
 
-            glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+            //34, 71, 9
+            glClearColor(34.0f / 255.0f, 71.0f / 255.0f, 9.0f / 255.0f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
 
             //----- rendering code -----
@@ -130,16 +131,15 @@ namespace engine
         return std::make_pair((size_t)0, "");
     }
 
-    void Bomberman::draw_quad(const geometry::Rectangle &pos, GLuint texture)
+    void Bomberman::draw_quad(const geometry::Rectangle &pos, GLuint texture, int offset_x, int offset_y)
     {
         glBindVertexArray(m_quad_vao);
-        glBindBuffer(GL_ARRAY_BUFFER, m_quad_vbo);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture);
 
         math::Matrix4x4<float> transform;
         transform = transform.scale(pos.width(), pos.height(), 0);
-        transform = transform.translate(pos.x(), pos.y(), 0);
+        transform = transform.translate(pos.x() + offset_x, pos.y() + offset_y, 0);
 
         glUniform3f(m_shloc_color_filter, 1.0, 1.0, 1.0); //always bind white here
         glUniformMatrix4fv(m_shloc_translation, 1, GL_FALSE, transform.data());
@@ -147,7 +147,6 @@ namespace engine
         glDrawArrays(GL_TRIANGLES, 0, 6);
 
         glBindVertexArray(0);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
     Controller* Bomberman::controller(NamedController nc)

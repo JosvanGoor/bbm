@@ -63,7 +63,7 @@ namespace engine
         void push_trigger(const std::string &key, const std::string &message);
         //returns [0, ""] when no such key can be found
         std::pair<size_t, std::string> get_recent_trigger(std::string key, size_t maxdelay);
-        void draw_quad(const geometry::Rectangle &pos, GLuint texture);
+        void draw_quad(const geometry::Rectangle &pos, GLuint texture, int offset_x = 0, int offset_y = 0);
 
         Controller *controller(NamedController nc); //returns selected controller.
 

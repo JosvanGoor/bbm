@@ -1,5 +1,7 @@
 #include "MainMenu.hpp"
 
+#include "Level.hpp"
+
 namespace engine
 {
 
@@ -27,7 +29,11 @@ namespace engine
     {
         if(m_last_click.x() == -1) return nullptr;
 
-        if(m_start->clicked(m_last_click)) std::cout << "start clicked :)\n";
+        if(m_start->clicked(m_last_click))
+        {
+            std::cout << "start clicked :)\n";
+            return get_testing_level();
+        }
         if(m_quit->clicked(m_last_click)) Bomberman::instance().end_game();
 
         m_last_click = Point(-1, -1);

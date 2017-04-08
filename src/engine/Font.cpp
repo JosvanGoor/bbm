@@ -205,7 +205,7 @@ namespace engine
     void RenderableString::draw() const
     {
         glBindVertexArray(m_vertex_array);
-        glBindBuffer(GL_ARRAY_BUFFER, m_vertex_buffer);
+        //glBindBuffer(GL_ARRAY_BUFFER, m_vertex_buffer);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, m_texture);
 
@@ -216,7 +216,7 @@ namespace engine
         glDrawArrays(GL_TRIANGLES, 0, 3 * m_triangles);
 
         glBindVertexArray(0);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        //glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
     //spul

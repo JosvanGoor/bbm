@@ -2,27 +2,31 @@
 EXECUTABLE = bombman
 
 #parts
-ENGINE = 				engine/Actor.o \
-						engine/Bomberman.o \
-						engine/Controllers.o \
-						engine/Font.o \
-						engine/Room.o \
-						engine/ShaderProgram.o \
-						engine/TextureCache.o 
-ENGINE_BOMERMAN =		engine/bomberman/Button.o \
-						engine/bomberman/MainMenu.o
-EXTERNAL_OBJECTS = 		extern/lodepng.o \
-						extern/gl_core_4_4.o
-GEOMETRY_OBJECTS = 		geometry/Point.o \
-						geometry/Rectangle.o
-MATH_OBJECTS = 			math/Math.o \
-						math/Matrix4x4.o \
-						math/Vector3.o \
-						math/Vector4.o
-UTILITY_OBJECTS =		utility/Settings.o
+ENGINE = 					engine/Actor.o \
+							engine/Bomberman.o \
+							engine/Controllers.o \
+							engine/Font.o \
+							engine/Room.o \
+							engine/ShaderProgram.o \
+							engine/TextureCache.o 
+ENGINE_BOMERMAN =			engine/bomberman/Button.o \
+							engine/bomberman/Level.o \
+							engine/bomberman/MainMenu.o
+ENGINE_BOMBERMAN_ACTORS =	engine/bomberman/actors/Scenery.o \
+							engine/bomberman/actors/Destructables.o
+EXTERNAL_OBJECTS = 			extern/lodepng.o \
+							extern/gl_core_4_4.o
+GEOMETRY_OBJECTS =	 		geometry/Point.o \
+							geometry/Rectangle.o
+MATH_OBJECTS = 				math/Math.o \
+							math/Matrix4x4.o \
+							math/Vector3.o \
+							math/Vector4.o
+UTILITY_OBJECTS =			utility/Settings.o
 
 OBJECTS = 	$(ENGINE) \
 			$(ENGINE_BOMERMAN) \
+			$(ENGINE_BOMBERMAN_ACTORS) \
 			$(EXTERNAL_OBJECTS) \
 			$(GEOMETRY_OBJECTS) \
 			$(MATH_OBJECTS) \
@@ -32,6 +36,7 @@ OBJECTS = 	$(ENGINE) \
 #build tools
 COMPILER = g++
 FLAGS = -std=c++14 -Wall -g
+#FLAGS = -std=c++14 -Wall -O2
 
 ifeq ($(OS), Windows_NT)
 LINKER_SDL = -lmingw32 -lSDL2main -lSDL2
