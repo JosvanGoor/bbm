@@ -110,7 +110,7 @@ namespace engine
                 if(event.caxis.which != m_jid) return;
                 
                 newval = math::stretch(event.caxis.value, -MAX_CONTROLLER_RANGE, MAX_CONTROLLER_RANGE, -1, 1);
-                if(abs(newval) < m_deadzone) newval = 0;
+                if(std::abs(newval) < m_deadzone) newval = 0;
 
                 switch(event.caxis.axis)
                 {

@@ -130,7 +130,7 @@ namespace engine
         return std::make_pair((size_t)0, "");
     }
 
-    void Bomberman::draw_quad(const Rectangle &pos, GLuint texture)
+    void Bomberman::draw_quad(const geometry::Rectangle &pos, GLuint texture)
     {
         glBindVertexArray(m_quad_vao);
         glBindBuffer(GL_ARRAY_BUFFER, m_quad_vbo);

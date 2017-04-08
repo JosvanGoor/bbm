@@ -3,8 +3,6 @@
 
 #include "../geometry/Rectangle.hpp"
 
-using geometry::Rectangle;
-
 namespace engine
 {
 
@@ -21,8 +19,8 @@ namespace engine
         void speed_y(float f);
         void set_speed(float x, float y);
         
-        Rectangle &position();
-        void position(const Rectangle &rect);
+        geometry::Rectangle &position();
+        void position(const geometry::Rectangle &rect);
 
         virtual void act();
         virtual void draw(double ahead);
@@ -34,7 +32,7 @@ namespace engine
         
         float m_speed_x;
         float m_speed_y;
-        Rectangle m_position;
+        geometry::Rectangle m_position;
     };
 
 }

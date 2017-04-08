@@ -11,7 +11,7 @@ namespace engine
         m_texture = Bomberman::instance().texture_cache().get_texture("textures/unknown.png");
         m_speed_x = 0;
         m_speed_y = 0;
-        m_position = Rectangle(0, 0, 1, 1);
+        m_position = geometry::Rectangle(0, 0, 1, 1);
     }
 
     int Actor::type() const { return m_type; }
@@ -25,8 +25,8 @@ namespace engine
         m_speed_y = y;
     }
 
-    Rectangle& Actor::position() { return m_position; }
-    void Actor::position(const Rectangle &rect) { m_position = rect; }
+    geometry::Rectangle& Actor::position() { return m_position; }
+    void Actor::position(const geometry::Rectangle &rect) { m_position = rect; }
 
     void Actor::act()
     {
