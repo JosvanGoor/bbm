@@ -1,7 +1,7 @@
 #ifndef BOMBERMAN_ENGINE_ACTORS_SCENERY_HPP
 #define BOMBERMAN_ENGINE_ACTORS_SCENERY_HPP
 
-#include "../../Actor.hpp"
+#include "../../engine/Actor.hpp"
 
 namespace engine
 {

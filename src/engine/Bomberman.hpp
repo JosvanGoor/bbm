@@ -16,7 +16,7 @@
 #include "ShaderProgram.hpp"
 #include "../math/Math.hpp"
 #include "../math/Matrix4x4.hpp"
-#include "bomberman/MainMenu.hpp"
+#include "../bomberman/MainMenu.hpp"
 #include "../utility/Settings.hpp"
 #include "../geometry/Rectangle.hpp"
 

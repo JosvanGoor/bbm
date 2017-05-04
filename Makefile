@@ -9,11 +9,11 @@ ENGINE = 					engine/Actor.o \
 							engine/Room.o \
 							engine/ShaderProgram.o \
 							engine/TextureCache.o 
-ENGINE_BOMERMAN =			engine/bomberman/Button.o \
-							engine/bomberman/Level.o \
-							engine/bomberman/MainMenu.o
-ENGINE_BOMBERMAN_ACTORS =	engine/bomberman/actors/Scenery.o \
-							engine/bomberman/actors/Destructables.o
+BOMBERMAN =					bomberman/Button.o \
+							bomberman/Level.o \
+							bomberman/MainMenu.o
+BOMBERMAN_ACTORS =			bomberman/actors/Scenery.o \
+							bomberman/actors/Destructables.o
 EXTERNAL_OBJECTS = 			extern/lodepng.o \
 							extern/gl_core_4_4.o
 GEOMETRY_OBJECTS =	 		geometry/Point.o \
@@ -25,8 +25,8 @@ MATH_OBJECTS = 				math/Math.o \
 UTILITY_OBJECTS =			utility/Settings.o
 
 OBJECTS = 	$(ENGINE) \
-			$(ENGINE_BOMERMAN) \
-			$(ENGINE_BOMBERMAN_ACTORS) \
+			$(BOMBERMAN) \
+			$(BOMBERMAN_ACTORS) \
 			$(EXTERNAL_OBJECTS) \
 			$(GEOMETRY_OBJECTS) \
 			$(MATH_OBJECTS) \

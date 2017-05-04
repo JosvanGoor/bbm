@@ -1,6 +1,6 @@
 #include "Destructables.hpp"
 
-#include "../../Bomberman.hpp"
+#include "../../engine/Bomberman.hpp"
 
 namespace engine
 {

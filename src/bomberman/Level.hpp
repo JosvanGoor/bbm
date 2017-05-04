@@ -2,8 +2,8 @@
 #define ENGINE_BOMBERMAN_LEVEL_HPP
 
 #include <vector>
-#include "../Room.hpp"
-#include "../Actor.hpp"
+#include "../engine/Room.hpp"
+#include "../engine/Actor.hpp"
 
 namespace engine
 {

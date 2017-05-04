@@ -2,9 +2,9 @@
 #define ENGINE_BOMBERMAN_MAINMENU_HPP
 
 #include "Button.hpp"
-#include "../Room.hpp"
-#include "../Bomberman.hpp"
-#include "../../geometry/Point.hpp"
+#include "../engine/Room.hpp"
+#include "../engine/Bomberman.hpp"
+#include "../geometry/Point.hpp"
 
 using geometry::Point;
 

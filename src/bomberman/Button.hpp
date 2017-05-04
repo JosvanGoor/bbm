@@ -1,8 +1,8 @@
 #ifndef ENGINE_BOMBERMAN_BUTTON_HPP
 #define ENGINE_BOMBERMAN_BUTTON_HPP
 
-#include "../Actor.hpp"
-#include "../../geometry/Point.hpp"
+#include "../engine/Actor.hpp"
+#include "../geometry/Point.hpp"
 
 using geometry::Point;
 
