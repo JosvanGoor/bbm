@@ -1,4 +1,4 @@
-# bbm
+# Bomberman
 
 ### NOTES
 Gamerooms should just pass the controls to the eventsync so that it can keep the controllers up to date.
