@@ -40,12 +40,12 @@ namespace engine
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         
         glerr = glGetError();
-        if(glerr != GL_NO_ERROR) throw Exception(__PRETTY_FUNCTION__, "failed to generate texture and setting parameters: " + utility::translate_opengl_error_code(glerr));
+        if(glerr != GL_NO_ERROR) throw Exception(__PRETTY_FUNCTION__, "failed to generate texture and setting parameters: " + translate_opengl_error_code(glerr));
 
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image.data());
 
         glerr = glGetError();
-        if(glerr != GL_NO_ERROR) throw Exception(__PRETTY_FUNCTION__, "failed to load data into opengl texture object: " + utility::translate_opengl_error_code(glerr));
+        if(glerr != GL_NO_ERROR) throw Exception(__PRETTY_FUNCTION__, "failed to load data into opengl texture object: " + translate_opengl_error_code(glerr));
 
         glBindTexture(GL_TEXTURE_2D, 0); //unbind texture.
 
@@ -80,12 +80,12 @@ namespace engine
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         
         glerr = glGetError();
-        if(glerr != GL_NO_ERROR) throw Exception(__PRETTY_FUNCTION__, "failed to generate texture and setting parameters: " + utility::translate_opengl_error_code(glerr));
+        if(glerr != GL_NO_ERROR) throw Exception(__PRETTY_FUNCTION__, "failed to generate texture and setting parameters: " + translate_opengl_error_code(glerr));
 
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image.data());
 
         glerr = glGetError();
-        if(glerr != GL_NO_ERROR) throw Exception(__PRETTY_FUNCTION__, "failed to load data into opengl texture object: " + utility::translate_opengl_error_code(glerr));
+        if(glerr != GL_NO_ERROR) throw Exception(__PRETTY_FUNCTION__, "failed to load data into opengl texture object: " + translate_opengl_error_code(glerr));
 
         glBindTexture(GL_TEXTURE_2D, 0); //unbind texture.
 

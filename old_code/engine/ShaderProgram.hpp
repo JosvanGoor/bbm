@@ -1,17 +1,14 @@
 #ifndef ENGINE_SHADERPROGRAM_HPP
 #define ENGINE_SHADERPROGRAM_HPP
 
-#include <vector>
 #include <memory>
-#include "../core/Exception.hpp"
-#include "../core/Stringable.hpp"
+#include "../Core.hpp"
 #include "../extern/gl_core_4_4.h"
-#include "../utility/Utility.hpp"
 
 namespace engine 
 {
 
-    class ShaderProgram : public Stringable
+    class ShaderProgram : public Object
     {
     public:
         virtual ~ShaderProgram(); //public so its reachable for shared_ptr.
@@ -34,9 +31,7 @@ namespace engine
     protected:
         ShaderProgram();
         ShaderProgram(const ShaderProgram&) = delete;
-        ShaderProgram(ShaderProgram&&) = delete;
-        void operator=(const ShaderProgram&) = delete;
-        void operator=(ShaderProgram&&) = delete;
+        ShaderProgram(const ShaderProgram&&) = delete;
 
         bool m_linked;
         GLuint m_vertex_shader;

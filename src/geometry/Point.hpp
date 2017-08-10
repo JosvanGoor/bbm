@@ -2,7 +2,7 @@
 #define BBM_GEOMETRY_POINT_HPP
 
 #include <string>
-#include "../Core.hpp"
+#include "../core/Stringable.hpp"
 
 namespace geometry
 {
@@ -11,7 +11,7 @@ namespace geometry
         2d point
     */
 
-    class Point : public Object
+    class Point : public Stringable
     {
         public:
             Point(int x = 0, int y = 0);

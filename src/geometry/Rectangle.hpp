@@ -3,7 +3,7 @@
 
 #include <string>
 #include "Point.hpp"
-#include "../Core.hpp"
+#include "../core/Stringable.hpp"
 
 namespace geometry
 {
@@ -12,7 +12,7 @@ namespace geometry
         2d rectangle, axis-aligned.
     */
 
-    class Rectangle : public Object
+    class Rectangle : public Stringable
     {
     public:
         Rectangle(int x = 0, int y = 0, int w = 0, int h = 0);

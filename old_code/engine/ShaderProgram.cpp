@@ -47,7 +47,7 @@ namespace engine
         glUseProgram(m_shader_program);
 
         GLenum error = glGetError();
-        if(error != GL_NO_ERROR) throw Exception(__PRETTY_FUNCTION__, "Failed to activate shader program - " + utility::translate_opengl_error_code(error));
+        if(error != GL_NO_ERROR) throw Exception(__PRETTY_FUNCTION__, "Failed to activate shader program - " + translate_opengl_error_code(error));
     }
 
     void ShaderProgram::add_vertex_shader(std::string file)
@@ -60,7 +60,7 @@ namespace engine
         }
         
         m_vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-        std::vector<unsigned char> data = utility::read_file(file);
+        std::vector<unsigned char> data = read_file(file);
         const char* pbuf = reinterpret_cast<char*>(data.data());
         int size = data.size();
 
@@ -83,7 +83,7 @@ namespace engine
         glDeleteShader(m_fragment_shader); //delete any previous program.
         
         m_fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-        std::vector<unsigned char> data = utility::read_file(file);
+        std::vector<unsigned char> data = read_file(file);
         const char* pbuf = reinterpret_cast<char*>(data.data());
         int size = data.size();
 

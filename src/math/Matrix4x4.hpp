@@ -29,12 +29,12 @@
 #include "Math.hpp"
 #include "Vector3.hpp"
 #include "Vector4.hpp"
-#include "../Core.hpp"
+#include "../core/Stringable.hpp"
 
 namespace math
 {
 
-    template<typename T> class Matrix4x4 : public Object
+    template<typename T> class Matrix4x4 : public Stringable
     {
     public:
         T m_data[16]; //array containing the numbers.
@@ -317,6 +317,8 @@ namespace math
         }
 
     };
+
+    typedef Matrix4x4<float> Matrix4f;
 
     //generates a lookat matrix (used in calculating MVP matrix)
     template<typename T> Matrix4x4<T> look_at(Vector3<T> eye, Vector3<T> center, Vector3<T> up)

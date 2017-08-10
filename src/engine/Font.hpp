@@ -2,15 +2,11 @@
 #define ENGINE_FONT_HPP
 
 #include <string>
-#include "../math/Vector3.hpp"
-#include "../math/Matrix4x4.hpp"
-#include "../extern/gl_core_4_4.h"
+#include "RenderableString.hpp"
 
 namespace engine
 {
-    class RenderableString;
-
-    /*
+     /*
         This class describes a Spritesheet font (v1), such a font consists of 2 files. the spritesheet (image), and a ,info file organized as follows:
         <file start>
         sheet_width sheet_height
@@ -26,18 +22,21 @@ namespace engine
     class Font
     {
         public:
-            Font(const std::string &fontname); //searches for *.png & .info itsself.
+            Font(const std::string &file);
             Font(const Font&) = delete;
-            Font(const Font&&) = delete;
+            Font(Font&&) = delete;
+            void operator=(const Font&) = delete;
+            void operator=(Font&&) = delete;
             ~Font();
 
-            bool contains(char c) const; //returns whether this char can be drawn.
-            bool valid(const std::string &str); //returns whether string can be drawn.
-            RenderableString* renderable_string(const std::string &str);
-            void renderable_string(RenderableString *old, const std::string &str); //reuses old buffer for new string.
+            bool contains(char c) const; //returns whether this char can be rendered
+            bool is_valid(const std::string &str) const; //returns whetther the complete string can be rendered.
+            RenderableString *renderable_string(const std::string &str); //generates a renderable string
+            void renderable_string(RenderableString *old, const std::string &newstr); //reuses buffers for new string.
 
         protected:
-            GLuint m_texture;
+            std::string m_texture;
+            
             char m_first;
             int m_advance;
             int m_newline_advance;
@@ -48,45 +47,6 @@ namespace engine
             size_t m_sprite_height;
 
             void parse_info(const std::string &file);
-    };
-
-    class RenderableString
-    {
-    public:
-        RenderableString(const RenderableString&) = delete;
-        RenderableString(const RenderableString&&) = delete;
-        ~RenderableString();
-
-        void draw() const;
-        
-        //setters/getters
-        size_t width() const;
-        size_t height() const;
-        GLuint texture() const;
-        GLuint vertex_buffer() const;
-        std::string string() const;
-
-        math::Vector3<float> color() const;
-        void color(const math::Vector3<float> &color);
-        math::Matrix4x4<float> transform() const;
-        void transform(const math::Matrix4x4<float> &transform);
-        
-    protected:
-        friend class Font;
-        RenderableString() 
-            : m_height(0), m_width(0), m_triangles(0), m_texture(0), m_vertex_buffer(0), m_string(""), m_color(), m_transform() { };
-
-        size_t m_height;
-        size_t m_width;
-        size_t m_triangles;
-        
-        GLuint m_texture;
-        GLuint m_vertex_array;
-        GLuint m_vertex_buffer;
-        
-        std::string m_string;
-        math::Vector3<float> m_color;
-        math::Matrix4x4<float> m_transform;
     };
 
 }

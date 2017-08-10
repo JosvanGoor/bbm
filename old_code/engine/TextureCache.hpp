@@ -3,10 +3,7 @@
 
 #include <map>
 #include "../extern/lodepng.h"
-#include "../extern/gl_core_4_4.h"
-#include "../core/Exception.hpp"
 #include "../core/Stringable.hpp"
-#include "../utility/Utility.hpp"
 
 namespace engine
 {
@@ -16,9 +13,7 @@ namespace engine
     public:
         TextureCache() = default;
         TextureCache(const TextureCache&) = delete;
-        TextureCache(TextureCache&&) = delete;
-        void operator=(const TextureCache&) = delete;
-        void operator=(TextureCache&&) = delete;
+        TextureCache(const TextureCache&&) = delete;
        ~TextureCache();
 
         bool has_texture(const std::string &file);

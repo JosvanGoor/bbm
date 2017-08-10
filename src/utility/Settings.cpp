@@ -74,6 +74,19 @@ namespace utility
 
         for(auto entry : m_settings)
         {
+            if(entry.first.substr(0, 2) == std::string("__")) continue;
+            out << entry.first << "=" << entry.second << "\n";
+        }
+
+        out.close();
+    }
+
+    void Settings::save_all_to_file() const
+    {
+        std::ofstream out(m_file);
+
+        for(auto entry : m_settings)
+        {
             out << entry.first << "=" << entry.second << "\n";
         }
 

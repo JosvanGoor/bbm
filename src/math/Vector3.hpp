@@ -14,12 +14,12 @@
 #include <typeinfo>
 
 #include "Math.hpp"
-#include "../Core.hpp"
+#include "../core/Stringable.hpp"
 
 namespace math
 {
 
-    template<typename T = float> class Vector3 : public Object
+    template<typename T = float> class Vector3 : public Stringable
     {
     public:
         T m_x;
@@ -230,6 +230,9 @@ namespace math
             return ss.str();
         }
     };
+
+    //default float
+    typedef Vector3<float> Vector3f;
 
 }
 

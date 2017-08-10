@@ -6,7 +6,7 @@
     The classes in the math namespace dont do error checking for safe values for the sake of performance, so you make sure no /0 happens.
     The classes in namespace math are also all castable to strings, returning readable interpretation of the object in memory.
 
-    The standard use is float, and it is created to be used with numericals.
+    The default type is float, and it is created to be used with numericals.
  */
 
 #include <cmath>
@@ -14,12 +14,12 @@
 #include <typeinfo>
 
 #include "Math.hpp"
-#include "../Core.hpp"
+#include "../core/Stringable.hpp"
 
 namespace math
 {
 
-    template<typename T = float> class Vector4 : public Object
+    template<typename T = float> class Vector4 : public Stringable
     {
     public:
         T m_x;
@@ -31,6 +31,11 @@ namespace math
         Vector4() : m_x(), m_y(), m_z(), m_w() {}
         Vector4(T x, T y, T z, T w) : m_x(x), m_y(y), m_z(z), m_w(w) {}
         template<typename U> Vector4(const Vector4<U> &v) : m_x(v.m_x), m_y(v.m_y), m_z(v.m_z), m_w(v.m_w) {}
+
+        const T x() const { return m_x; }
+        const T y() const { return m_y; }
+        const T z() const { return m_z; }
+        const T w() const { return m_w; }
 
         //returns a const T[4] with the values.
         const T *values() const
@@ -222,13 +227,15 @@ namespace math
             return *this;
         }
 
-        virtual std::string toString() const
+        virtual std::string to_string() const
         {
             std::stringstream ss;
             ss << "ez::Math::Vector4<" /*<< typeid(T).name()*/ << ">: [" << m_x << ", " << m_y << ", " << m_z << ", " << m_w << "].";
             return ss.str();
         }
     };
+
+    typedef Vector4<float> Vector4f;
 
 }
 
