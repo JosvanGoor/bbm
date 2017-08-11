@@ -29,6 +29,7 @@ namespace math
 
         //clean, per-value and copy constructor
         Vector4() : m_x(), m_y(), m_z(), m_w() {}
+        Vector4(T t) : m_x(t), m_y(t), m_z(t), m_w(t) {}
         Vector4(T x, T y, T z, T w) : m_x(x), m_y(y), m_z(z), m_w(w) {}
         template<typename U> Vector4(const Vector4<U> &v) : m_x(v.m_x), m_y(v.m_y), m_z(v.m_z), m_w(v.m_w) {}
 

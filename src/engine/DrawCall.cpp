@@ -8,8 +8,6 @@ namespace engine
     
     DrawCall::DrawCall(const std::vector<GLfloat> &data, const std::string &tex)
     {
-        std::cout << "vbo constructing with " << data.size() << " floats." << std::endl;
-
         glGenVertexArrays(1, &m_vertex_array);
         glBindVertexArray(m_vertex_array);
 
@@ -51,10 +49,33 @@ namespace engine
         glUniformMatrix4fv(Bomberman::instance().shloc_view(), 1, GL_FALSE, Bomberman::instance().default_view().data());
         glUniformMatrix4fv(Bomberman::instance().shloc_projection(), 1, GL_FALSE, Bomberman::instance().projection().data());
         
-        //std::cout << "Rendering " << m_triangles_count << " triangles." << std::endl;
         glDrawArrays(GL_TRIANGLES, 0, m_triangles_count);
 
         glBindVertexArray(0);
+    }
+
+    void DrawCall::draw(const math::Matrix4f &transform, const std::string &texture) const
+    {
+        glBindVertexArray(m_vertex_array);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, Bomberman::instance().texture_cache().get_texture(texture));
+
+        glUniform4f(Bomberman::instance().shloc_color_filter(), m_color.x(), m_color.y(), m_color.z(), m_color.w());
+        glUniformMatrix4fv(Bomberman::instance().shloc_translation(), 1, GL_FALSE, transform.data());
+        glUniformMatrix4fv(Bomberman::instance().shloc_view(), 1, GL_FALSE, Bomberman::instance().default_view().data());
+        glUniformMatrix4fv(Bomberman::instance().shloc_projection(), 1, GL_FALSE, Bomberman::instance().projection().data());
+        
+        glDrawArrays(GL_TRIANGLES, 0, m_triangles_count);
+
+        glBindVertexArray(0);
+    }
+
+    void DrawCall::draw(const geometry::Rectanglef &rect, const std::string &texture) const
+    {
+        math::Matrix4f tf;
+        tf = tf.scale(rect.width(), rect.height(), 0.0f);
+        tf = tf.translate(rect.x(), rect.y(), 0.0f);
+        draw(tf, texture);
     }
 
     math::Matrix4f DrawCall::transform() const { return m_transform; }

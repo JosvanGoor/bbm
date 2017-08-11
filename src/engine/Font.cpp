@@ -25,10 +25,9 @@ namespace engine
 
     bool Font::contains(char c) const
     {
-        return true;
         if(c == '\n' || c == ' ') return true;
         if(c < m_first) return false;
-        if(c >= (char)(m_first + (m_sheet_width * m_sheet_height))) return false;
+        if((size_t)c >= (m_first + (m_sheet_width * m_sheet_height))) return false;
         return true;
     }
 
@@ -40,8 +39,6 @@ namespace engine
 
     RenderableString* Font::renderable_string(const std::string &str)
     {
-        std::cout << __PRETTY_FUNCTION__ << " called with argument " << str << std::endl;
-
         std::vector<GLfloat> data;
         data.reserve(str.length() * 2 * 5 * 3);
 
@@ -67,7 +64,10 @@ namespace engine
                 advance = 0;
                 continue;
             }
-            else if(!contains(c)) continue;
+            else if(!contains(c)) 
+            {
+                continue;
+            }
 
             int cindex = c - m_first;
             float tex_x = cindex % m_sheet_width * tex_width;
@@ -84,7 +84,6 @@ namespace engine
             triangles += 2;
         }
 
-        std::cout << "Font generated " << data.size() << " floats" << std::endl;
         RenderableString *rs = new RenderableString(data, m_texture);
         rs->m_height = m_sprite_height;
         rs->m_width = advance;

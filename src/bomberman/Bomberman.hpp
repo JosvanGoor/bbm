@@ -6,10 +6,16 @@
 
 #include "../engine/DrawCall.hpp"
 #include "../engine/Font.hpp"
+#include "../engine/GameStateController.hpp"
 #include "../engine/RenderableString.hpp"
 #include "../engine/ShaderProgram.hpp"
 #include "../engine/TextureCache.hpp"
 #include "../utility/Settings.hpp"
+
+/*
+    During setup / runtime some __values get set in the settings, 
+    check below the class definition for a list.
+*/
 
 class Bomberman
 {
@@ -21,19 +27,22 @@ class Bomberman
         void game_loop(); //MAGIX
 
         //Getters:
-        size_t tick_rate();
-        size_t current_tick();
-        engine::Font* default_font();
+        size_t tick_rate() const;
+        size_t current_tick() const;
+        engine::DrawCall& unity_quad(); //meant to be used with complex draw.
+        engine::Font& default_font();
         engine::TextureCache& texture_cache();
         utility::Settings& settings();
-        math::Matrix4f projection();
-        math::Matrix4f default_view();
+        math::Matrix4f projection() const;
+        math::Matrix4f default_view() const;
         engine::ShaderProgram* shader_program();
-        GLuint shloc_texture();
-        GLuint shloc_translation();
-        GLuint shloc_view();
-        GLuint shloc_projection();
-        GLuint shloc_color_filter();
+        GLuint shloc_texture() const;
+        GLuint shloc_translation() const;
+        GLuint shloc_view() const;
+        GLuint shloc_projection() const;
+        GLuint shloc_color_filter() const;
+
+        void quit(); //ends the gameloop.
 
     private:
         Bomberman(); //private because singleton
@@ -53,9 +62,11 @@ class Bomberman
         //speed settings
         size_t m_tick_rate;
         size_t m_current_engine_tick;
+        bool m_game_running;
 
         //Shared data structures
         //engine::DrawCall m_unity_quad;
+        engine::DrawCall *m_unity_quad; //quad from (0,0) to (1,1) (both V&T).
         engine::Font *m_default_font;
         engine::TextureCache m_texture_cache;
         utility::Settings m_settings;
@@ -75,5 +86,12 @@ class Bomberman
         SDL_GLContext m_opengl_context;
     
 };
+
+/*
+    On startup:
+        __scr_w - width of the render area
+        __scr_h - height of the render area
+        __legacy - if this value is 1 the shaders use a version pre 4.4.
+*/
 
 #endif

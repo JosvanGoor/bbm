@@ -7,30 +7,53 @@
 namespace geometry
 {
 
-    /*
-        2d point
-    */
-
-    class Point : public Stringable
+    template<typename T> class Point : public Stringable
     {
         public:
-            Point(int x = 0, int y = 0);
+            Point() :
+                m_x(0), m_y(0) { }
+            Point(T x, T y) :
+                m_x(x), m_y(y) { }
 
-            void set(int x, int y);
-            void translate(int dx, int dy);
-            float distance(const Point &p);
+            template<typename U> Point<U> as()
+            {
+                return Point(U(m_x), U(m_y));
+            }
+            
+            void set(T x, T y)
+            {
+                m_x = x;
+                m_y = y;
+            }
 
-            int x() const;
-            void x(int x);
-            int y() const;
-            void y(int y);
+            void translate(T dx, T dy)
+            {
+                m_x += dx;
+                m_y += dy;
+            }
 
-            virtual std::string to_string() const;
+            float distance(const Point<T> &p)
+            {
+                return sqrt(pow(m_x - p.x(), 2) + pow(m_y - p.y(), 2));
+            }
+
+            T x() const { return m_x; }
+            T y() const { return m_y; }
+
+            void x(T x) { m_x = x; }
+            void y(T y) { m_y = y; }
+
+            virtual std::string to_string() const override
+            {
+                return "geometry::Point - [" + std::to_string(m_x) + ", " + std::to_string(m_y) + "].";
+            }
+
         protected:
-            int m_x;
-            int m_y;
+            T m_x;
+            T m_y;
     };
 
+    typedef Point<float> Pointf;
 }
 
 #endif

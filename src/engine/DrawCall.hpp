@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include "../geometry/Rectangle.hpp"
 #include "../math/Vector4.hpp"
 #include "../math/Matrix4x4.hpp"
 #include "../extern/gl_core_4_4.h"
@@ -28,6 +29,9 @@ namespace engine
             void operator=(DrawCall&&) = delete;
 
             virtual void draw() const;
+            //for common shapes but rapidly changing textures etc.
+            virtual void draw(const math::Matrix4f &transform, const std::string &tex) const;
+            virtual void draw(const geometry::Rectanglef &rect, const std::string &tex) const;
 
             math::Matrix4f transform() const;
             void transform(const math::Matrix4f &transform);

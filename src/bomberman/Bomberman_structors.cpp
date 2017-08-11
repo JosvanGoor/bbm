@@ -21,6 +21,17 @@ Bomberman::Bomberman()
     opengl_setup();
     shader_setup();
 
+    m_game_running = false;
+
+    std::vector<GLfloat> floats = { 0.0, 0.0, 0.0,      0.0, 0.0,
+                                    1.0, 0.0, 0.0,      1.0, 0.0,
+                                    0.0, 1.0, 0.0,      0.0, 1.0,
+                                    1.0, 0.0, 0.0,      1.0, 0.0,
+                                    1.0, 1.0, 0.0,      1.0, 1.0,
+                                    0.0, 1.0, 0.0,      0.0, 1.0};
+
+    m_unity_quad = new engine::DrawCall(floats, "");
+
     std::cout << "---- Bomberman engine has succesfully initialized.\n" << std::endl;
 }
 
@@ -128,6 +139,8 @@ Bomberman::~Bomberman()
     SDL_DestroyWindow(m_window_handle);
     SDL_Quit();
     std::cout << "Destroyed sdl runtime.\n";
+
+    std::cout << "DEBUG OUTPUT OF SETTINGS:\n" << m_settings.full_settings_report("    ");
 
     std::cout << "----- Finished unloading engine, quitting... -----" << std::endl;
 }
