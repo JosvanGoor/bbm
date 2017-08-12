@@ -8,7 +8,7 @@ Bomberman::Bomberman()
 {
     std::cout << "----- Bomberman engine starting initialization -----\n";
 
-    SDL_Init(SDL_INIT_VIDEO);
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER);
 
     std::cout << "Loading settings...\n";
     load_default_settings();

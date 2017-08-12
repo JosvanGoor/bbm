@@ -135,7 +135,7 @@ namespace engine
                 }
                 break;
             case SDL_CONTROLLERBUTTONDOWN:
-                if(event.caxis.which != m_jid) return;
+                if(event.cbutton.which != m_jid) return;
                 
                 switch(event.cbutton.button)
                 {
@@ -171,7 +171,7 @@ namespace engine
 
                 break;
             case SDL_CONTROLLERBUTTONUP:
-                if(event.caxis.which != m_jid) return;
+                if(event.cbutton.which != m_jid) return;
                 
                 switch(event.cbutton.button)
                 {
@@ -207,7 +207,7 @@ namespace engine
 
                 break;
             case SDL_CONTROLLERDEVICEREMOVED:
-                if(event.caxis.which != m_jid) return;
+                if(event.cdevice.which != m_jid) return;
                 SDL_GameControllerClose(m_controller);
                 m_controller = nullptr;
                 m_connected = false;

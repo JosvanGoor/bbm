@@ -18,6 +18,7 @@ namespace math
         return (((val / range) * newrange) + newmin);
     }
 
+    /*
     int cos(int i) { return cosf(i); }
     long cos(long l) { return cosf(l); }
     float cos(float f) { return cos(f); }
@@ -32,5 +33,5 @@ namespace math
     long tan(long l) { return tanf(l); }
     float tan(float f) { return tanf(f); }
     double tan(double d) { return tanf(d); }
-
+    */
 }

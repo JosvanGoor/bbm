@@ -42,6 +42,7 @@ namespace math
     double stretch(double val, double min, double max, double newmin = 0.0, double newmax = 1.0);
 
     //overloaded macro for closest cmath-cos/sin/tan implementation
+    /*
     int cos(int i);
     long cos(long l);
     float cos(float f);
@@ -56,5 +57,6 @@ namespace math
     long tan(long l);
     float tan(float f);
     double tan(double d);
+    */
 }
 #endif // MATH_MATH_H

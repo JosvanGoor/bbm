@@ -3,7 +3,7 @@
 EXECUTABLE = bomberman
 
 #objects by folders
-BOMBERMAN_MENUS	=	bomberman/menus/MainMenu.o \
+BOMBERMAN_MENUS	=	bomberman/menus/MainMenu.o
 
 BOMBERMAN		=	$(BOMBERMAN_MENUS) \
 					bomberman/Bomberman.o \
@@ -13,7 +13,8 @@ BOMBERMAN		=	$(BOMBERMAN_MENUS) \
 CORE			=	core/Exception.o \
 					core/Stringable.o
 
-ENGINE			=	engine/DrawCall.o \
+ENGINE			=	engine/Controllers.o \
+					engine/DrawCall.o \
 					engine/Entity.o \
 					engine/Font.o \
 					engine/GameStateController.o \
