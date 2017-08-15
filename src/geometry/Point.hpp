@@ -17,7 +17,7 @@ namespace geometry
 
             template<typename U> Point<U> as()
             {
-                return Point(U(m_x), U(m_y));
+                return Point<U>(U(m_x), U(m_y));
             }
             
             void set(T x, T y)

@@ -40,23 +40,5 @@ namespace math
 
     int snap_to_grid(int val, int grid);
     double stretch(double val, double min, double max, double newmin = 0.0, double newmax = 1.0);
-
-    //overloaded macro for closest cmath-cos/sin/tan implementation
-    /*
-    int cos(int i);
-    long cos(long l);
-    float cos(float f);
-    double cos(double d);
-
-    int sin(int i);
-    long sin(long l);
-    float sin(float f);
-    double sin(double d);
-
-    int tan(int i);
-    long tan(long l);
-    float tan(float f);
-    double tan(double d);
-    */
 }
 #endif // MATH_MATH_H

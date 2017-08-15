@@ -44,7 +44,50 @@ math::Matrix4f Bomberman::default_view() const
     return m_default_view;
 }
 
-engine::ShaderProgram* Bomberman::shader_program()
+engine::MouseController& Bomberman::mouse()
+{
+    return m_mouse;
+}
+
+engine::KeyboardController& Bomberman::keyboard_controller()
+{
+    return m_keyboard;
+}
+
+engine::GamepadController& Bomberman::gamepad_controller_1()
+{
+    return m_gamepad_1;
+}
+
+engine::GamepadController& Bomberman::gamepad_controller_2()
+{
+    return m_gamepad_2;
+}
+
+engine::GamepadController& Bomberman::gamepad_controller_3()
+{
+    return m_gamepad_3;
+}
+
+engine::GamepadController& Bomberman::gamepad_controller_4()
+{
+    return m_gamepad_4;
+}
+
+engine::Controller& Bomberman::get_named_controller(engine::NamedController nc)
+{
+    switch(nc)
+    {
+        case engine::GAMEPAD_1: return m_gamepad_1;
+        case engine::GAMEPAD_2: return m_gamepad_2;
+        case engine::GAMEPAD_3: return m_gamepad_3;
+        case engine::GAMEPAD_4: return m_gamepad_4;
+        case engine::KEYBOARD_1: return m_keyboard;
+        default: throw Exception(__PRETTY_FUNCTION__, "Enumerated controller not recognized by the engine.");
+    }
+}
+
+engine::ShaderProgram* Bomberman::shader_program() const
 {
     return m_shader_program;
 }

@@ -4,9 +4,11 @@
 #include <chrono>
 #include <SDL2/SDL.h>
 
+#include "../engine/Controllers.hpp"
 #include "../engine/DrawCall.hpp"
 #include "../engine/Font.hpp"
 #include "../engine/GameStateController.hpp"
+#include "../engine/MouseController.hpp"
 #include "../engine/RenderableString.hpp"
 #include "../engine/ShaderProgram.hpp"
 #include "../engine/TextureCache.hpp"
@@ -35,7 +37,14 @@ class Bomberman
         utility::Settings& settings();
         math::Matrix4f projection() const;
         math::Matrix4f default_view() const;
-        engine::ShaderProgram* shader_program();
+        engine::MouseController& mouse();
+        engine::KeyboardController& keyboard_controller();
+        engine::GamepadController& gamepad_controller_1();
+        engine::GamepadController& gamepad_controller_2();
+        engine::GamepadController& gamepad_controller_3();
+        engine::GamepadController& gamepad_controller_4();
+        engine::Controller& get_named_controller(engine::NamedController nc);
+        engine::ShaderProgram* shader_program() const;
         GLuint shloc_texture() const;
         GLuint shloc_translation() const;
         GLuint shloc_view() const;
@@ -52,6 +61,9 @@ class Bomberman
         void opengl_setup();
         void shader_setup();
         void load_default_settings();
+
+        //event handling
+        void handle_events();
 
         //singleton!!
         Bomberman(const Bomberman&) = delete;
@@ -73,6 +85,14 @@ class Bomberman
         math::Matrix4f m_projection;
         math::Matrix4f m_default_view;
 
+        //user controls handles.
+        engine::MouseController m_mouse;
+        engine::KeyboardController m_keyboard;
+        engine::GamepadController m_gamepad_1;
+        engine::GamepadController m_gamepad_2;
+        engine::GamepadController m_gamepad_3;
+        engine::GamepadController m_gamepad_4;
+        
         //single-pass shader
         engine::ShaderProgram *m_shader_program;
         GLuint m_shloc_texture;

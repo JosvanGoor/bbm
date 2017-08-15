@@ -18,6 +18,7 @@ ENGINE			=	engine/Controllers.o \
 					engine/Entity.o \
 					engine/Font.o \
 					engine/GameStateController.o \
+					engine/MouseController.o \
 					engine/RenderableString.o \
 					engine/ShaderProgram.o \
 					engine/TextureCache.o

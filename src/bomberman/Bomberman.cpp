@@ -55,27 +55,13 @@ void Bomberman::game_loop()
             in_this_second -= 1000.0;
         }
 
-        SDL_Event event;
-        while(SDL_PollEvent(&event))
-        {
-            switch(event.type)
-            {
-                case SDL_QUIT:
-                    quit();
-                    break;
-                case SDL_KEYUP:
-                    if(event.key.keysym.sym == SDLK_ESCAPE)
-                    {
-                        quit();
-                    }
-                    break;
-            }
-        }
+        handle_events();
 
         while(lag >= tick_duration)
         {
             //logic update
             game_state->logic_update();
+            m_mouse.tick();
 
             lag -= tick_duration;
             updates++;
@@ -99,4 +85,58 @@ void Bomberman::game_loop()
     std::cout << "\nDestroyed current engine::GameStateController.\n";
 
     std::cout << "----- Exited gameloop -----\n" << std::endl;
+}
+
+void Bomberman::handle_events()
+{
+    SDL_Event event;
+
+    while(SDL_PollEvent(&event))
+    {
+        switch(event.type)
+        {
+            case SDL_QUIT:
+                quit();
+                break;
+            case SDL_KEYDOWN:
+            case SDL_KEYUP:
+                m_keyboard.update(event);
+                break;
+            case SDL_MOUSEBUTTONDOWN:
+            case SDL_MOUSEBUTTONUP:
+            case SDL_MOUSEMOTION:
+            case SDL_MOUSEWHEEL:
+                m_mouse.update(event);
+            case SDL_CONTROLLERAXISMOTION:
+            case SDL_CONTROLLERBUTTONDOWN:
+            case SDL_CONTROLLERBUTTONUP:
+            case SDL_CONTROLLERDEVICEREMOVED:
+                m_gamepad_1.update(event);
+                m_gamepad_2.update(event);
+                m_gamepad_3.update(event);
+                m_gamepad_4.update(event);
+                break;
+            case SDL_CONTROLLERDEVICEADDED:
+                if(!m_gamepad_1.connected()) 
+                {
+                    m_gamepad_1 = engine::GamepadController(SDL_GameControllerOpen(event.cdevice.which));
+                    std::cout << "\rNew controller mapped to location 1...\n";
+                }
+                else if(!m_gamepad_2.connected()) 
+                {
+                    m_gamepad_2 = engine::GamepadController(SDL_GameControllerOpen(event.cdevice.which));
+                    std::cout << "\rNew controller mapped to location 2...\n";
+                }
+                else if(!m_gamepad_3.connected()) 
+                {
+                    m_gamepad_3 = engine::GamepadController(SDL_GameControllerOpen(event.cdevice.which));
+                    std::cout << "\rNew controller mapped to location 3...\n";
+                }
+                else if(!m_gamepad_4.connected()) 
+                {
+                    m_gamepad_4 = engine::GamepadController(SDL_GameControllerOpen(event.cdevice.which));
+                    std::cout << "\rNew controller mapped to location 4...\n";
+                }
+        }
+    }
 }

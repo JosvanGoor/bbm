@@ -139,6 +139,7 @@ namespace engine
             KeyboardController(const std::string &mapping);
 
             std::string mapping() const; //returns mapping as string.
+            void apply_mapping(const std::string &mapping);
             void map_key(ControllerKey ck, SDL_Keycode kc);
 
             virtual void update(const SDL_Event &event);

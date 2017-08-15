@@ -17,7 +17,21 @@ MainMenu::MainMenu()
 
 engine::GameStateController* MainMenu::logic_update()
 {
-    //nog nix
+    //check if mouse is clicked on buttons
+    if(Bomberman::instance().mouse().left_mouse_button() == engine::BUTTON_RELEASED)
+    {
+        if(m_rect_start.contains(Bomberman::instance().mouse().cursor_position().as<float>()))
+        {
+            //start pressed
+        }
+        
+        if(m_rect_quit.contains(Bomberman::instance().mouse().cursor_position().as<float>()))
+        {
+            //quit pressed
+            Bomberman::instance().quit();
+        }
+    }
+
     return nullptr;
 }
 

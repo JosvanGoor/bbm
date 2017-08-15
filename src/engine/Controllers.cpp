@@ -253,14 +253,7 @@ namespace engine
 
     KeyboardController::KeyboardController(const std::string &mapping)
     {
-        std::vector<std::string> maps = utility::split(mapping, ',');
-        if(maps.size() != 24) throw Exception(__PRETTY_FUNCTION__, "Expected mapping of 24 buttons got " + std::to_string(maps.size()) + " instead.");
-
-        for(size_t i = 0; i < 24; ++i)
-        {
-            m_mapping[i] = std::stoi(maps[i]);
-        }
-
+        apply_mapping(mapping);
         m_type = 'k';
         m_connected = true;
     }
@@ -276,6 +269,17 @@ namespace engine
         }
 
         return ss.str();
+    }
+
+    void KeyboardController::apply_mapping(const std::string &mapping)
+    {
+        std::vector<std::string> maps = utility::split(mapping, ',');
+        if(maps.size() != 24) throw Exception(__PRETTY_FUNCTION__, "Expected mapping of 24 buttons got " + std::to_string(maps.size()) + " instead.");
+
+        for(size_t i = 0; i < 24; ++i)
+        {
+            m_mapping[i] = std::stoi(maps[i]);
+        }
     }
 
     void KeyboardController::map_key(ControllerKey ck, SDL_Keycode kc)
