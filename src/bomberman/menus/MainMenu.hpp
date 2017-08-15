@@ -1,6 +1,7 @@
 #ifndef BOMBERMAN_MENUS_MAINMENU_HPP
 #define BOMBERMAN_MENUS_MAINMENU_HPP
 
+#include "../Level.hpp"
 #include "../../math/Matrix4x4.hpp"
 #include "../../geometry/Rectangle.hpp"
 #include "../../engine/GameStateController.hpp"

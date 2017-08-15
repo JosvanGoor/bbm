@@ -38,12 +38,6 @@ namespace engine
             virtual GameStateController* logic_update() = 0; //abstract
             virtual void draw_to_screen(float ahead) = 0; //abstract
 
-            //TODO: denk hier over na, details in events?
-            //virtual void mouse_event(const SDL_Event &event) = 0;
-            //virtual void gamepad_event(const SDL_Event &event) = 0;
-            //virtual void keyboard_event(const SDL_KeyboardEvent &event) = 0;
-            
-
             virtual std::string to_string() const override;
     };
 

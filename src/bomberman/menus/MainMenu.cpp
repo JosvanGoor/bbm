@@ -23,6 +23,7 @@ engine::GameStateController* MainMenu::logic_update()
         if(m_rect_start.contains(Bomberman::instance().mouse().cursor_position().as<float>()))
         {
             //start pressed
+            return get_default_level();
         }
         
         if(m_rect_quit.contains(Bomberman::instance().mouse().cursor_position().as<float>()))

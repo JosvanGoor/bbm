@@ -114,4 +114,10 @@ class Bomberman
         __legacy - if this value is 1 the shaders use a version pre 4.4.
 */
 
+enum EntityType
+{
+    WALL,
+    MUD
+};
+
 #endif

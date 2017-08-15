@@ -60,8 +60,14 @@ void Bomberman::game_loop()
         while(lag >= tick_duration)
         {
             //logic update
-            game_state->logic_update();
+            engine::GameStateController *rval = game_state->logic_update();
             m_mouse.tick();
+
+            if(rval != nullptr)
+            {
+                delete game_state;
+                game_state = rval;
+            }
 
             lag -= tick_duration;
             updates++;
@@ -99,6 +105,8 @@ void Bomberman::handle_events()
                 quit();
                 break;
             case SDL_KEYDOWN:
+                if(event.key.keysym.sym == SDLK_ESCAPE)
+                    quit();
             case SDL_KEYUP:
                 m_keyboard.update(event);
                 break;

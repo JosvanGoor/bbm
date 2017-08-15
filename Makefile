@@ -3,39 +3,43 @@
 EXECUTABLE = bomberman
 
 #objects by folders
-BOMBERMAN_MENUS	=	bomberman/menus/MainMenu.o
+BOMBERMAN_ENTITIES	=	bomberman/entities/Wall.o
 
-BOMBERMAN		=	$(BOMBERMAN_MENUS) \
-					bomberman/Bomberman.o \
-					bomberman/Bomberman_structors.o \
-					bomberman/Bomberman_accessors.o
+BOMBERMAN_MENUS		=	bomberman/menus/MainMenu.o
 
-CORE			=	core/Exception.o \
-					core/Stringable.o
+BOMBERMAN			=	$(BOMBERMAN_ENTITIES) \
+						$(BOMBERMAN_MENUS) \
+						bomberman/Bomberman.o \
+						bomberman/Bomberman_structors.o \
+						bomberman/Bomberman_accessors.o \
+						bomberman/Level.o
 
-ENGINE			=	engine/Controllers.o \
-					engine/DrawCall.o \
-					engine/Entity.o \
-					engine/Font.o \
-					engine/GameStateController.o \
-					engine/MouseController.o \
-					engine/RenderableString.o \
-					engine/ShaderProgram.o \
-					engine/TextureCache.o
+	CORE			=	core/Exception.o \
+						core/Stringable.o
 
-EXTERN			=	extern/gl_core_4_4.o \
-					extern/lodepng.o
+	ENGINE			=	engine/Controllers.o \
+						engine/DrawCall.o \
+						engine/Entity.o \
+						engine/Font.o \
+						engine/GameStateController.o \
+						engine/MouseController.o \
+						engine/RenderableString.o \
+						engine/ShaderProgram.o \
+						engine/TextureCache.o
 
-GEOMETRY		=	geometry/Point.o \
-					geometry/Rectangle.o
+	EXTERN			=	extern/gl_core_4_4.o \
+						extern/lodepng.o
 
-MATH		 	= 	math/Math.o \
-					math/Matrix4x4.o \
-					math/Vector3.o \
-					math/Vector4.o
+	GEOMETRY		=	geometry/Point.o \
+						geometry/Rectangle.o
 
-UTILITY			=	utility/Settings.o \
-					utility/Utility.o
+	MATH		 	= 	math/Math.o \
+						math/Matrix4x4.o \
+						math/Vector3.o \
+						math/Vector4.o
+
+	UTILITY			=	utility/Settings.o \
+						utility/Utility.o
 
 
 #combine objects
