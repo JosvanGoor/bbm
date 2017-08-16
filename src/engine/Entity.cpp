@@ -25,6 +25,7 @@ namespace engine
     void Entity::position(const geometry::Pointf &pos) { m_position.position(pos.x(), pos.y()); }
     void Entity::position(const geometry::Rectanglef &pos) { m_position = pos; }
     void Entity::mark_for_deletion() { m_marked_for_deletion = true; }
+    void Entity::bind(Level *level) { m_level = level; }
 
     void Entity::act()
     {

@@ -31,6 +31,7 @@ void Level::setup_scenery_drawcall()
 
 void Level::add_actor(engine::Entity* e)
 {
+    e->bind(this);
     m_actors.push_back(e);
 }
 
@@ -39,13 +40,61 @@ void Level::add_scenery(engine::Entity* e)
     m_scenery.push_back(e);
 }
 
+std::vector<engine::Entity*>& Level::actors()
+{
+    return m_actors;
+}
+
+std::vector<engine::Entity*>& Level::scenery()
+{
+    return m_scenery;
+}
+
+//TODO: add players
 engine::GameStateController* Level::logic_update()
 {
+    //call act on everything + check for erase
+    //m_player_1.act();
+    //m_player_2.act();
+    //m_player_3.act();
+    //m_player_4.act();
+
+    //update all actors
+    for(engine::Entity* e : m_actors)
+    {
+        e->act();
+    }
+
+    //collision check everything
+    for(auto it = m_actors.begin(); it != m_actors.end(); ++it)
+    {
+        for(auto it2 = it; it2 != m_actors.end(); ++it2)
+        {
+            if(it == it2) continue;
+            if((*it)->position().intersects((*it2)->position()))
+            {
+                (*it)->collision(*it2);
+                (*it2)->collision(*it);
+            }
+        }
+    }
+
+    //handle removals (this should be done faster/earlier)
+    for(auto it = m_actors.begin(); it != m_actors.end(); it++)
+    {
+        if((*it)->marked_for_deletion())
+            it = m_actors.erase(it);
+    }
+    
     return nullptr;
 }
 
 void Level::draw_to_screen(float ahead)
 {
+    for(engine::Entity* e : m_actors)
+    {
+        e->draw(ahead);
+    }
     m_draw_scenery->draw();
 }
 

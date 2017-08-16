@@ -2,6 +2,7 @@
 #define BOMBERMAN_BOMBERMAN_HPP
 
 #include <chrono>
+#include <random>
 #include <SDL2/SDL.h>
 
 #include "../engine/Controllers.hpp"
@@ -51,6 +52,10 @@ class Bomberman
         GLuint shloc_projection() const;
         GLuint shloc_color_filter() const;
 
+        //limits are including (code in accesors file)
+        int random_int_number(int low, int high);
+        double random_real_number(double low = 0.0, double high = 1.0);
+
         void quit(); //ends the gameloop.
 
     private:
@@ -85,6 +90,12 @@ class Bomberman
         math::Matrix4f m_projection;
         math::Matrix4f m_default_view;
 
+        //random numbers
+        std::mt19937 m_int_random;
+        std::mt19937 m_real_random;
+        std::uniform_int_distribution<int> m_int_dist;
+        std::uniform_real_distribution<double> m_real_dist;
+
         //user controls handles.
         engine::MouseController m_mouse;
         engine::KeyboardController m_keyboard;
@@ -116,13 +127,16 @@ class Bomberman
 
 enum EntityType
 {
-    PLAYER_1,
+    PLAYER_1,   //TODO: players
     PLAYER_2,
     PLAYER_3,
     PLAYER_4,
 
     WALL,
     MUD,
+
+    BOMB,       //TODO: bomb
+    EXPLOSION,  //TODO: explosion
 
     POWERUP_AMMO,
     POWERUP_POWER,

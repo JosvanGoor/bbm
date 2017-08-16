@@ -121,3 +121,17 @@ void Bomberman::quit()
 {
     m_game_running = false;
 }
+
+int Bomberman::random_int_number(int low, int high)
+{
+    static std::uniform_int_distribution<int>::param_type param(low, high);
+    m_int_dist.param(param);
+    return m_int_dist(m_int_random);
+}
+
+double Bomberman::random_real_number(double low, double high)
+{
+    static std::uniform_real_distribution<double>::param_type param(low, high);
+    m_real_dist.param(param);
+    return m_real_dist(m_real_random);
+}

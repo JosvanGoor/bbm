@@ -3,7 +3,9 @@
 EXECUTABLE = bomberman
 
 #objects by folders
-BOMBERMAN_ENTITIES	=	bomberman/entities/Wall.o
+BOMBERMAN_ENTITIES	=	bomberman/entities/Mud.o \
+						bomberman/entities/Powerup.o \
+						bomberman/entities/Wall.o
 
 BOMBERMAN_MENUS		=	bomberman/menus/MainMenu.o
 

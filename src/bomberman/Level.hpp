@@ -18,6 +18,9 @@ class Level : public engine::GameStateController
         void add_actor(engine::Entity* e);
         void add_scenery(engine::Entity* e);
 
+        std::vector<engine::Entity*>& actors();
+        std::vector<engine::Entity*>& scenery();
+
         virtual GameStateController* logic_update() override;
         virtual void draw_to_screen(float ahead) override;
         virtual std::string to_string() const override;

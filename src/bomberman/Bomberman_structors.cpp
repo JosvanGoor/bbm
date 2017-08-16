@@ -18,6 +18,11 @@ Bomberman::Bomberman()
     std::cout << "Tickrate: 40\n";
     m_tick_rate = 40;
 
+    std::cout << "Seeding int and real random generators\n";
+    std::random_device rd;
+    m_int_random = std::mt19937(rd());
+    m_real_random = std::mt19937(rd());
+
     opengl_setup();
     shader_setup();
 
