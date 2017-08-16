@@ -31,6 +31,8 @@ namespace engine
     void Controller::player(int i) { m_player = i; }
     bool Controller::connected() const { return m_connected; }
 
+    void Controller::simple_rumble(float str, size_t ms) { }
+
     double Controller::main_stick_x() const { return m_main_stick_x; }
     double Controller::main_stick_y() const { return m_main_stick_y; }
     double Controller::second_stick_x() const { return m_second_stick_x; }
@@ -78,6 +80,7 @@ namespace engine
         m_type = 'g';
         m_jid = -1;
         m_controller = nullptr;
+        m_haptic = nullptr;
         m_connected = false;
         m_deadzone = 0.0;
     }
@@ -91,14 +94,26 @@ namespace engine
         if(m_controller)
         {
             m_jid = SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(controller));
+            m_haptic = SDL_HapticOpenFromJoystick(SDL_GameControllerGetJoystick(controller));
+            SDL_HapticRumbleInit(m_haptic);
             m_connected = true;
         }
         else
         {
             m_jid = -1;
+            m_controller = nullptr;
+            m_haptic = nullptr;
             m_connected = false;
         }
         m_deadzone = Bomberman::instance().settings().as_double("controller_deadzone");
+    }
+
+    void GamepadController::simple_rumble(float str, size_t ms)
+    {
+        if(m_haptic)
+        {
+            SDL_HapticRumblePlay(m_haptic, str, ms);
+        }
     }
 
     void GamepadController::update(const SDL_Event &event)

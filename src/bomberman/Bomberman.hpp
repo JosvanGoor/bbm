@@ -116,8 +116,18 @@ class Bomberman
 
 enum EntityType
 {
+    PLAYER_1,
+    PLAYER_2,
+    PLAYER_3,
+    PLAYER_4,
+
     WALL,
-    MUD
+    MUD,
+
+    POWERUP_AMMO,
+    POWERUP_POWER,
+    POWERUP_SPEED,
+    POWERUP_POISON
 };
 
 #endif

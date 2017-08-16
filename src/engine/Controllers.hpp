@@ -72,6 +72,8 @@ namespace engine
             void player(int player);
             bool connected() const; //returns false when the controller lost connection.
             virtual void update(const SDL_Event &event) = 0; //updates state
+            
+            virtual void simple_rumble(float strength, size_t ms); //rumbles controller (fails silently), @ strenth% for ms milliseconds.
 
             //[-1.0, 1.0]
             double main_stick_x() const;
@@ -108,7 +110,7 @@ namespace engine
             char m_type; //controller type. 0 = none, ''
             double m_rt;
             double m_lt;
-            int m_player; //whether controller is linked to a player
+            int m_player; //whether controller is linked to a player //decrepated
             bool m_connected;
             bool m_buttons[14];
             double m_main_stick_x;
@@ -124,12 +126,14 @@ namespace engine
             GamepadController(SDL_GameController *controller);
             ~GamepadController() { if(m_controller) SDL_GameControllerClose(m_controller); };
 
-            virtual void update(const SDL_Event &event);
+            virtual void update(const SDL_Event &event) override;
+            virtual void simple_rumble(float str, size_t ms) override;
 
         protected:
             int m_deadzone;
             SDL_GameController *m_controller;
             SDL_JoystickID m_jid;
+            SDL_Haptic *m_haptic;
     };
 
     class KeyboardController : public Controller

@@ -128,21 +128,25 @@ void Bomberman::handle_events()
                 if(!m_gamepad_1.connected()) 
                 {
                     m_gamepad_1 = engine::GamepadController(SDL_GameControllerOpen(event.cdevice.which));
+                    m_gamepad_1.simple_rumble(1.0, 750);
                     std::cout << "\rNew controller mapped to location 1...\n";
                 }
                 else if(!m_gamepad_2.connected()) 
                 {
                     m_gamepad_2 = engine::GamepadController(SDL_GameControllerOpen(event.cdevice.which));
+                    m_gamepad_2.simple_rumble(1.0, 750);
                     std::cout << "\rNew controller mapped to location 2...\n";
                 }
                 else if(!m_gamepad_3.connected()) 
                 {
                     m_gamepad_3 = engine::GamepadController(SDL_GameControllerOpen(event.cdevice.which));
+                    m_gamepad_3.simple_rumble(1.0, 750);
                     std::cout << "\rNew controller mapped to location 3...\n";
                 }
                 else if(!m_gamepad_4.connected()) 
                 {
                     m_gamepad_4 = engine::GamepadController(SDL_GameControllerOpen(event.cdevice.which));
+                    m_gamepad_4.simple_rumble(1.0, 750);
                     std::cout << "\rNew controller mapped to location 4...\n";
                 }
         }
