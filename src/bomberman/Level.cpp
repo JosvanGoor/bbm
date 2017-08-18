@@ -273,7 +273,9 @@ Level* get_default_level()
 
     }
 
-
+    math::Matrix4f v;
+    v = v.translate(448, 24, 0);
+    Bomberman::instance().set_default_view(v);
 
     rval->setup_scenery_drawcall();
     return rval;

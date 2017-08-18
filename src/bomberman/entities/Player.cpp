@@ -1,5 +1,7 @@
 #include "Player.hpp"
 
+#include <iomanip>
+
 #include "Bomb.hpp"
 #include "Explosion.hpp"
 #include "../Bomberman.hpp"
@@ -105,6 +107,7 @@ void Player::collision(engine::Entity *entity)
 {
     if(marked_for_deletion()) return;
 
+    int t;
     switch(entity->type())
     {
         case POWERUP_AMMO:
@@ -126,9 +129,12 @@ void Player::collision(engine::Entity *entity)
 
         case EXPLOSION:
             mark_for_deletion();
+            Bomberman::instance().get_named_controller(m_controller)->simple_rumble(1.0, 750);
+            t = Bomberman::instance().current_tick();
             std::cout << "\nPlayer " << m_player << " died from ";
             std::cout << "player " << ((Explosion*)entity)->player_id() << "'s bomb in tick ";
-            std::cout << Bomberman::instance().current_tick() << "." << std::endl;
+            std::cout << std::setfill('0') << t << ", (" << std::setw(2) << ((t / 40) / 60);
+            std::cout << "m " << std::setw(2) << ((t / 40) % 60) << "s)" << std::endl;
             break;
 
         //case BOMB:

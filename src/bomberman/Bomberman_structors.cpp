@@ -70,6 +70,7 @@ void Bomberman::opengl_setup()
     m_settings.set("__scr_w", std::to_string(w));
 
     m_default_view = math::Matrix4f();
+
     if(!m_window_handle)
         throw Exception(__PRETTY_FUNCTION__, "could not create sdl window.");
     std::cout << "    Created window...\n";

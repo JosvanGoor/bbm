@@ -53,6 +53,9 @@ class Bomberman
         GLuint shloc_projection() const;
         GLuint shloc_color_filter() const;
 
+        //setters
+        void set_default_view(const math::Matrix4f &v);
+
         //limits are including (code in accesors file)
         int random_int_number(int low, int high);
         double random_real_number(double low = 0.0, double high = 1.0);

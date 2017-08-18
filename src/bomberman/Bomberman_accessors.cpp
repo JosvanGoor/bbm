@@ -143,3 +143,8 @@ double Bomberman::random_real_number(double low, double high)
     m_real_dist.param(param);
     return m_real_dist(m_real_random);
 }
+
+void Bomberman::set_default_view(const math::Matrix4f &v)
+{
+    m_default_view = v;
+}

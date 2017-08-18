@@ -30,7 +30,7 @@ void Bomberman::game_loop()
         mat = mat.translate((float)1, m_settings.as_int("__scr_h") - 17.0f, (float)0);
 
         fps_counter->transform(mat);
-        fps_counter->color(math::Vector4<float>(0.0, 1.0, 0.0, 0.25));
+        fps_counter->color(math::Vector4<float>(0.0, 1.0, 0.0, 0.75));
     } //mat gets removed from stack.
     std::cout << " done!\n";
 
@@ -67,6 +67,7 @@ void Bomberman::game_loop()
             {
                 delete m_game_state;
                 m_game_state = rval;
+                m_current_engine_tick = 1; //TODO: ?
             }
 
             lag -= tick_duration;
@@ -80,7 +81,10 @@ void Bomberman::game_loop()
         m_game_state->draw_to_screen(lag / tick_duration);
 
         //draw fps counter
+        math::Matrix4f temp = m_default_view;
+        m_default_view = math::Matrix4f(); //TODO: optimize pls.
         fps_counter->draw();
+        m_default_view = temp;
 
         //swap context
         SDL_GL_SwapWindow(m_window_handle);
@@ -121,7 +125,6 @@ void Bomberman::handle_events()
             case SDL_CONTROLLERBUTTONUP:
             case SDL_CONTROLLERDEVICEREMOVED:
                 m_gamepad_1->update(event);
-                std::cout << "\r" << *m_gamepad_1 << std::flush;
                 m_gamepad_2->update(event);
                 m_gamepad_3->update(event);
                 m_gamepad_4->update(event);
