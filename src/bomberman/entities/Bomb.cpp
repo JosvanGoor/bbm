@@ -50,6 +50,7 @@ std::string Bomb::to_string() const
 
 void Bomb::boom()
 {
+    m_player->restore_ammo();
     Level *level = (Level*)Bomberman::instance().game_state_controller();
     level->add_actor(new Explosion(player_id(), m_position));
 
@@ -57,7 +58,7 @@ void Bomb::boom()
     geometry::Rectanglef pos(m_position);
     for(int i = 0; i < m_power; ++i)
     {
-        pos.translate(0.0f, -48.0f);
+        pos.translate(0.0f, -64.0f);
         if(level->collides_with_scenery(pos)) break;
         if(level->collides_with_mud(pos))
         {
@@ -71,7 +72,7 @@ void Bomb::boom()
     pos = m_position;
     for(int i = 0; i < m_power; ++i)
     {
-        pos.translate(0.0f, 48.0f);
+        pos.translate(0.0f, 64.0f);
         if(level->collides_with_scenery(pos)) break;
         if(level->collides_with_mud(pos))
         {
@@ -85,7 +86,7 @@ void Bomb::boom()
     pos = m_position;
     for(int i = 0; i < m_power; ++i)
     {
-        pos.translate(-48.0f, 0.0f);
+        pos.translate(-64.0f, 0.0f);
         if(level->collides_with_scenery(pos)) break;
         if(level->collides_with_mud(pos))
         {
@@ -99,7 +100,7 @@ void Bomb::boom()
     pos = m_position;
     for(int i = 0; i < m_power; ++i)
     {
-        pos.translate(48, 0);
+        pos.translate(64, 0);
         if(level->collides_with_scenery(pos)) break;
         if(level->collides_with_mud(pos))
         {
@@ -108,6 +109,4 @@ void Bomb::boom()
         }
         level->add_actor(new Explosion(player_id(), pos));
     }
-
-    level->debug_print_actors();
 }

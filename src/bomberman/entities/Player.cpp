@@ -36,7 +36,7 @@ Player::Player(engine::NamedController nc, const geometry::Rectanglef &pos) : en
     m_position = pos;
 
     m_ammo = 1;
-    m_speed = 5;
+    m_speed = 6;
     m_poisoned = false;
     m_bomb_power = 2;
     m_direction = NO_DIRECTION;
@@ -47,9 +47,16 @@ int Player::player_id()
     return m_player;
 }
 
+void Player::restore_ammo()
+{
+    m_ammo++;
+}
+
 void Player::act()
 {
     if(marked_for_deletion()) return;
+
+    if(m_poisoned) m_poisoned--;
 
     engine::GamepadController *controller = (engine::GamepadController*)Bomberman::instance().get_named_controller(m_controller);
 
@@ -63,7 +70,7 @@ void Player::act()
     if(m_direction != prev)
         m_position.snap_to_grid(GRID_SNAP, GRID_SNAP);
     
-    int speed = m_poisoned ? -m_speed : m_speed;
+    int speed = m_poisoned ? m_speed * -1 : m_speed;
 
     switch(m_direction)
     {
@@ -74,7 +81,7 @@ void Player::act()
         default: break;
     }
 
-    if(controller->x() || controller->a())
+    if((controller->x() || controller->a()) && m_ammo > 0)
     {
         geometry::Rectanglef pos = m_position;
         pos.snap_to_grid(GRID_SNAP*2, GRID_SNAP*2);
@@ -83,6 +90,7 @@ void Player::act()
         if(!level->collides_with_actor_type(pos, BOMB))
         {
             level->add_actor(new Bomb(this, m_bomb_power, pos));
+            m_ammo--;
         }
     }
 }
@@ -112,7 +120,7 @@ void Player::collision(engine::Entity *entity)
             entity->mark_for_deletion();
             break;
         case POWERUP_POISON:
-            m_poisoned = true;
+            m_poisoned = 200;
             entity->mark_for_deletion();
             break;
 
@@ -128,8 +136,35 @@ void Player::collision(engine::Entity *entity)
         
         case MUD:
         case WALL:
-            //bounce off.
-            std::cout << "boop!";
+            switch(m_direction)
+            {
+                case UP:
+                    if(!m_poisoned)
+                        m_position.y(entity->position().y() + entity->position().height());
+                    else 
+                        m_position.y(entity->position().y() - m_position.height());
+                    break;
+                case DOWN:
+                    if(!m_poisoned)
+                        m_position.y(entity->position().y() - m_position.height());
+                    else
+                        m_position.y(entity->position().y() + entity->position().height());
+                    break;
+                case LEFT:
+                    if(!m_poisoned)
+                        m_position.x(entity->position().x() + entity->position().width());
+                    else
+                        m_position.x(entity->position().x() - m_position.width());    
+                    break;
+                case RIGHT:
+                    if(!m_poisoned)
+                        m_position.x(entity->position().x() - m_position.width());
+                    else
+                        m_position.x(entity->position().x() + entity->position().width());
+                    break;
+                default:
+                    m_position.snap_to_grid(m_position.width(), m_position.height());
+            }
             break;
     }
 }

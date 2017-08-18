@@ -116,6 +116,19 @@ engine::GameStateController* Level::logic_update()
         m_actors[i]->act();
     }
 
+    //collision check actors - scenery
+    for(size_t i = 0; i < m_scenery.size(); ++i)
+    {
+        if(m_scenery[i]->position().intersects(m_player_1->position()))
+        m_player_1->collision(m_scenery[i]);
+        if(m_scenery[i]->position().intersects(m_player_2->position()))
+            m_player_2->collision(m_scenery[i]);
+        if(m_scenery[i]->position().intersects(m_player_3->position()))
+            m_player_3->collision(m_scenery[i]);
+        if(m_scenery[i]->position().intersects(m_player_4->position()))
+            m_player_4->collision(m_scenery[i]);
+    }
+
     //collision check everything
     for(size_t i = 0; i < m_actors.size(); ++i)
     {

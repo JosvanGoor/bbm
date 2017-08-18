@@ -6,7 +6,7 @@
 #include "../../geometry/Rectangle.hpp"
 
 #define DEADZONE 0.5
-#define GRID_SNAP 16
+#define GRID_SNAP 32
 
 enum Direction
 {
@@ -24,6 +24,8 @@ class Player : public engine::Entity
 
         int player_id();
 
+        void restore_ammo();
+
         virtual void act() override;
         virtual void draw(double ahead) override;
         virtual void collision(engine::Entity *entity) override;
@@ -32,7 +34,7 @@ class Player : public engine::Entity
         int m_ammo;
         int m_speed;
         int m_player;
-        bool m_poisoned;
+        int m_poisoned;
         int m_bomb_power;
         Direction m_direction;
         engine::NamedController m_controller;

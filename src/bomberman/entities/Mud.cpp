@@ -20,7 +20,7 @@ void Mud::collision(engine::Entity *entity)
 
         Level *level = (Level*)Bomberman::instance().game_state_controller();
         //TODO: FIX RANDOM GENERATOR BUGS WHY IS IT SO WEIRD.
-        switch(rand() % 9)
+        switch(rand() % 12)
         {
             case 0:
                 level->add_actor(new Powerup(POWERUP_AMMO, m_position));
