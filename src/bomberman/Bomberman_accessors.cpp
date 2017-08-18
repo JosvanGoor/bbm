@@ -44,6 +44,11 @@ math::Matrix4f Bomberman::default_view() const
     return m_default_view;
 }
 
+engine::GameStateController* Bomberman::game_state_controller()
+{
+    return m_game_state;
+}
+
 engine::MouseController& Bomberman::mouse()
 {
     return m_mouse;
@@ -124,9 +129,12 @@ void Bomberman::quit()
 
 int Bomberman::random_int_number(int low, int high)
 {
+    
     static std::uniform_int_distribution<int>::param_type param(low, high);
     m_int_dist.param(param);
-    return m_int_dist(m_int_random);
+    int i = m_int_dist(m_int_random);
+    std::cout << __PRETTY_FUNCTION__ << " returning " << i;
+    return i;
 }
 
 double Bomberman::random_real_number(double low, double high)

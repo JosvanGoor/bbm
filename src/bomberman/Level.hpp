@@ -21,6 +21,11 @@ class Level : public engine::GameStateController
         std::vector<engine::Entity*>& actors();
         std::vector<engine::Entity*>& scenery();
 
+        bool collides_with_mud(const geometry::Rectanglef &pos);
+        bool collides_with_scenery(const geometry::Rectanglef &pos);
+
+        void debug_print_actors();
+
         virtual GameStateController* logic_update() override;
         virtual void draw_to_screen(float ahead) override;
         virtual std::string to_string() const override;

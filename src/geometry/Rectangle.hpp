@@ -16,6 +16,9 @@ namespace geometry
             Rectangle(T x, T y, T w, T h) :
                 m_x(x), m_y(y), m_width(w), m_height(h) { }
             
+            Rectangle(const Rectangle<T> &rect) : 
+                m_x(rect.x()), m_y(rect.y()), m_width(rect.width()), m_height(rect.height()) { }
+
             template<typename U> Rectangle<U> as() const
             {
                 return Rectangle<U>(U(m_x), U(m_y), U(m_width), U(m_height));
@@ -50,11 +53,11 @@ namespace geometry
 
             bool intersects(const Rectangle<T> &r)
             {
-                if(r.x() > (m_x + m_width)) return false;
-                if((r.x() + r.width()) < m_x) return false;
+                if(r.x() > (m_x + m_width - 1)) return false;
+                if((r.x() + r.width() - 1) < m_x) return false;
         
-                if(r.y() > (m_y + m_height)) return false;
-                if((r.y() + r.height()) < m_y) return false;
+                if(r.y() > (m_y + m_height - 1)) return false;
+                if((r.y() + r.height() - 1) < m_y) return false;
         
                 return true;
             }

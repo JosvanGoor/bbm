@@ -52,7 +52,7 @@ namespace engine
             size_t m_triangles_count;
     };
 
-    //std::vector<GLfloat> interleave(const std::vector<GLfloat> &v, const std::vector<GLfloat> &t);
+    
 
 }
 

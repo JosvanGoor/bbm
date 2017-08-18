@@ -38,6 +38,7 @@ class Bomberman
         utility::Settings& settings();
         math::Matrix4f projection() const;
         math::Matrix4f default_view() const;
+        engine::GameStateController* game_state_controller();
         engine::MouseController& mouse();
         engine::KeyboardController& keyboard_controller();
         engine::GamepadController& gamepad_controller_1();
@@ -89,6 +90,7 @@ class Bomberman
         utility::Settings m_settings;
         math::Matrix4f m_projection;
         math::Matrix4f m_default_view;
+        engine::GameStateController *m_game_state;
 
         //random numbers
         std::mt19937 m_int_random;

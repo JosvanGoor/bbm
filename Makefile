@@ -3,7 +3,9 @@
 EXECUTABLE = bomberman
 
 #objects by folders
-BOMBERMAN_ENTITIES	=	bomberman/entities/Mud.o \
+BOMBERMAN_ENTITIES	=	bomberman/entities/Bomb.o \
+						bomberman/entities/Explosion.o \
+						bomberman/entities/Mud.o \
 						bomberman/entities/Powerup.o \
 						bomberman/entities/Wall.o
 
@@ -81,6 +83,9 @@ restructure:
 
 clean:
 	rm -rf build/
+
+gdb: $(EXECUTABLE)
+	gdb ./$(EXECUTABLE)
 
 run: $(EXECUTABLE)
 	./$(EXECUTABLE)

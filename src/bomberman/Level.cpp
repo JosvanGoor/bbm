@@ -1,5 +1,11 @@
 #include "Level.hpp"
 
+#include <iostream>
+#include <algorithm>
+
+#include "entities/Bomb.hpp"
+#include "entities/Mud.hpp"
+
 Level::Level()
 {
     //?
@@ -31,7 +37,6 @@ void Level::setup_scenery_drawcall()
 
 void Level::add_actor(engine::Entity* e)
 {
-    e->bind(this);
     m_actors.push_back(e);
 }
 
@@ -50,6 +55,32 @@ std::vector<engine::Entity*>& Level::scenery()
     return m_scenery;
 }
 
+bool Level::collides_with_mud(const geometry::Rectanglef &pos)
+{
+    for(auto it = m_actors.begin(); it != m_actors.end(); ++it)
+    {
+        if((*it)->type() == MUD && (*it)->position().intersects(pos)) return true;
+    }
+    return false;
+}
+
+bool Level::collides_with_scenery(const geometry::Rectanglef &pos)
+{
+    for(auto it = m_scenery.begin(); it != m_scenery.end(); ++it)
+    {
+        if((*it)->position().intersects(pos)) return true;
+    }
+    return false;
+}
+
+void Level::debug_print_actors()
+{
+    for(engine::Entity *e : m_actors)
+    {
+        std::cout << *e << std::endl;
+    }
+}
+
 //TODO: add players
 engine::GameStateController* Level::logic_update()
 {
@@ -66,25 +97,42 @@ engine::GameStateController* Level::logic_update()
     }
 
     //collision check everything
-    for(auto it = m_actors.begin(); it != m_actors.end(); ++it)
+    for(size_t i = 0; i < m_actors.size(); ++i)
     {
-        for(auto it2 = it; it2 != m_actors.end(); ++it2)
+        for(size_t j = i+1; j < m_actors.size(); ++j)
         {
-            if(it == it2) continue;
-            if((*it)->position().intersects((*it2)->position()))
+            if(m_actors[i]->position().intersects(m_actors[j]->position()))
             {
-                (*it)->collision(*it2);
-                (*it2)->collision(*it);
+                m_actors[i]->collision(m_actors[j]);
+                m_actors[j]->collision(m_actors[i]);
             }
         }
     }
 
     //handle removals (this should be done faster/earlier)
+    //std::remove_if(m_actors.begin(), m_actors.end(), [](engine::Entity *e){ return e->marked_for_deletion(); });
+    
+    auto it = m_actors.begin();
+    while(it != m_actors.end())
+    {
+        if((*it)->marked_for_deletion())
+        {
+            it = m_actors.erase(it);
+        }
+        else it++;
+    }
+
+    /*
     for(auto it = m_actors.begin(); it != m_actors.end(); it++)
     {
         if((*it)->marked_for_deletion())
+        {
+            delete *it;
             it = m_actors.erase(it);
+            it--;
+        }
     }
+    */
     
     return nullptr;
 }
@@ -109,10 +157,14 @@ Level* get_default_level()
 
     Level *rval = new Level();
 
-    rval->add_scenery(new Wall("/textures/brick.png", Rectanglef(0, 0, 48, 48)));
-    rval->add_scenery(new Wall("/textures/brick.png", Rectanglef(48, 0, 48, 48)));
-    rval->add_scenery(new Wall("/textures/brick.png", Rectanglef(96, 0, 48, 48)));
-    rval->add_scenery(new Wall("/textures/brick.png", Rectanglef(0, 48, 48, 48)));
+    rval->add_scenery(new Wall("textures/brick.png", Rectanglef(0, 0, 48, 48)));
+    rval->add_scenery(new Wall("textures/brick.png", Rectanglef(48, 0, 48, 48)));
+    rval->add_scenery(new Wall("textures/brick.png", Rectanglef(96, 0, 48, 48)));
+    rval->add_scenery(new Wall("textures/brick.png", Rectanglef(0, 48, 48, 48)));
+
+    rval->add_actor(new Bomb(10, 1, Rectanglef(96, 48, 48, 48)));
+
+    rval->add_actor(new Mud("textures/mud.png", Rectanglef(146, 48, 48, 48)));
 
     rval->setup_scenery_drawcall();
     return rval;

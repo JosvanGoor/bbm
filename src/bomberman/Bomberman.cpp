@@ -34,7 +34,7 @@ void Bomberman::game_loop()
     } //mat gets removed from stack.
     std::cout << " done!\n";
 
-    engine::GameStateController *game_state = new MainMenu();
+    m_game_state = new MainMenu();
     std::cout << "Created initial engine::GameStateController\n";
 
     m_game_running = true;
@@ -60,13 +60,13 @@ void Bomberman::game_loop()
         while(lag >= tick_duration)
         {
             //logic update
-            engine::GameStateController *rval = game_state->logic_update();
+            engine::GameStateController *rval = m_game_state->logic_update();
             m_mouse.tick();
 
             if(rval != nullptr)
             {
-                delete game_state;
-                game_state = rval;
+                delete m_game_state;
+                m_game_state = rval;
             }
 
             lag -= tick_duration;
@@ -77,7 +77,7 @@ void Bomberman::game_loop()
         glClear(GL_COLOR_BUFFER_BIT);
 
         //draw game
-        game_state->draw_to_screen(lag / tick_duration);
+        m_game_state->draw_to_screen(lag / tick_duration);
 
         //draw fps counter
         fps_counter->draw();
@@ -87,7 +87,7 @@ void Bomberman::game_loop()
         render_passes++;
     }
 
-    delete game_state;
+    delete m_game_state;
     std::cout << "\nDestroyed current engine::GameStateController.\n";
 
     std::cout << "----- Exited gameloop -----\n" << std::endl;

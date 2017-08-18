@@ -10,6 +10,8 @@ class Mud : public engine::Entity
 
         //destroy on collision, chance for powerup.
         virtual void collision(Entity *entity) override;
+
+        virtual std::string to_string() const override;
 };
 
 #endif

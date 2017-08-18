@@ -7,8 +7,6 @@
 #include "../geometry/Rectangle.hpp"
 #include "../math/Matrix4x4.hpp"
 
-class Level;
-
 namespace engine
 {   
     class Entity : public Stringable
@@ -30,9 +28,6 @@ namespace engine
             void position(const geometry::Pointf &pos);
             void position(const geometry::Rectanglef &pos);
             void mark_for_deletion();
-
-            //TODO: is it better to access via Bomberman::current_gamestate_controller()?
-            void bind(Level* level); //binds entity to a certain level.
             
             virtual void act(); //progresses Entity 1 tick
             virtual void draw(double ahead); //draws entity (ahead is number of ticks since last actual update.)
@@ -44,8 +39,6 @@ namespace engine
             int m_type; //actor type, for use with collision checking etc.
             std::string m_texture;
             bool m_marked_for_deletion;
-
-            Level *m_level;
 
             geometry::Pointf m_speed;
             geometry::Rectanglef m_position;

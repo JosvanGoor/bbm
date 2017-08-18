@@ -1,5 +1,7 @@
 #include "Bomberman.hpp"
 
+#include <ctime>
+
 ////////////////////////////////////////////////////////////////////////
 //                            Initializers                            //
 ////////////////////////////////////////////////////////////////////////
@@ -20,8 +22,9 @@ Bomberman::Bomberman()
 
     std::cout << "Seeding int and real random generators\n";
     std::random_device rd;
-    m_int_random = std::mt19937(rd());
-    m_real_random = std::mt19937(rd());
+    srand(time(NULL));
+    m_int_random = std::mt19937(time(NULL));
+    m_real_random = std::mt19937(time(NULL));
 
     opengl_setup();
     shader_setup();
