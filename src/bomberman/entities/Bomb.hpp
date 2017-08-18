@@ -1,6 +1,7 @@
 #ifndef BOMBERMAN_ENTITIES_BOMB_HPP
 #define BOMBERMAN_ENTITIES_BOMB_HPP
 
+#include "Player.hpp"
 #include "Explosion.hpp"
 #include "../Level.hpp"
 #include "../../engine/Entity.hpp"
@@ -11,7 +12,7 @@
 class Bomb : public engine::Entity
 {
     public:
-        Bomb(int player, int power, const geometry::Rectanglef &position);
+        Bomb(Player *player, int power, const geometry::Rectanglef &position);
 
         int player_id() const;
         virtual void act() override; //tick down & explode.
@@ -21,7 +22,7 @@ class Bomb : public engine::Entity
     private:
         int m_power;
         int m_timer; //tick tock boom
-        int m_player; //player who dropped it.
+        Player *m_player; //player who dropped it.
 
         void boom();
 };

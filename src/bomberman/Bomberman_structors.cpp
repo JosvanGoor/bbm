@@ -20,7 +20,14 @@ Bomberman::Bomberman()
     std::cout << "Tickrate: 40\n";
     m_tick_rate = 40;
 
-    std::cout << "Seeding int and real random generators\n";
+    std::cout << "Setting up controller/keyboard inferface...\n";
+    m_gamepad_1 = new engine::GamepadController();
+    m_gamepad_2 = new engine::GamepadController();
+    m_gamepad_3 = new engine::GamepadController();
+    m_gamepad_4 = new engine::GamepadController();
+    m_keyboard = new engine::KeyboardController();
+
+    std::cout << "Seeding int and real random generators !!! BUGGED AF !!!\n";
     std::random_device rd;
     srand(time(NULL));
     m_int_random = std::mt19937(time(NULL));
@@ -142,6 +149,13 @@ Bomberman::~Bomberman()
 
     delete m_shader_program;
     std::cout << "Marked shader program for deconstruction.\n";
+
+    std::cout << "Releasing controller/keyboard interface.\n";
+    delete m_gamepad_1;
+    delete m_gamepad_2;
+    delete m_gamepad_3;
+    delete m_gamepad_4;
+    delete m_keyboard;
 
     SDL_GL_DeleteContext(m_opengl_context);
     SDL_DestroyWindow(m_window_handle);

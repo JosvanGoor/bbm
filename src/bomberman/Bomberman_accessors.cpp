@@ -54,32 +54,32 @@ engine::MouseController& Bomberman::mouse()
     return m_mouse;
 }
 
-engine::KeyboardController& Bomberman::keyboard_controller()
+engine::KeyboardController* Bomberman::keyboard_controller()
 {
     return m_keyboard;
 }
 
-engine::GamepadController& Bomberman::gamepad_controller_1()
+engine::GamepadController* Bomberman::gamepad_controller_1()
 {
     return m_gamepad_1;
 }
 
-engine::GamepadController& Bomberman::gamepad_controller_2()
+engine::GamepadController* Bomberman::gamepad_controller_2()
 {
     return m_gamepad_2;
 }
 
-engine::GamepadController& Bomberman::gamepad_controller_3()
+engine::GamepadController* Bomberman::gamepad_controller_3()
 {
     return m_gamepad_3;
 }
 
-engine::GamepadController& Bomberman::gamepad_controller_4()
+engine::GamepadController* Bomberman::gamepad_controller_4()
 {
     return m_gamepad_4;
 }
 
-engine::Controller& Bomberman::get_named_controller(engine::NamedController nc)
+engine::Controller* Bomberman::get_named_controller(engine::NamedController nc)
 {
     switch(nc)
     {

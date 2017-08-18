@@ -1,6 +1,6 @@
 #include "Wall.hpp"
 
-Wall::Wall(const std::string &tex, const geometry::Rectanglef &pos) : engine::Entity(WALL)
+Wall::Wall(const geometry::Rectanglef &pos, const std::string &tex) : engine::Entity(WALL)
 {
     m_texture = tex;
     m_position = pos;

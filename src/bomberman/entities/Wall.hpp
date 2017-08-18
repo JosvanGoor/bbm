@@ -8,7 +8,7 @@
 class Wall : public engine::Entity
 {
     public:
-        Wall(const std::string &tex, const geometry::Rectanglef &position);
+        Wall(const geometry::Rectanglef &position, const std::string &tex = "textures/brick.png");
 
         virtual std::string to_string() const override;
 };

@@ -6,7 +6,7 @@
 class Mud : public engine::Entity
 {
     public:
-        Mud(const std::string &texture, const geometry::Rectanglef &pos);
+        Mud(const geometry::Rectanglef &pos, const std::string &texture = "textures/mud.png");
 
         //destroy on collision, chance for powerup.
         virtual void collision(Entity *entity) override;

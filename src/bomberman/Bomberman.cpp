@@ -108,45 +108,47 @@ void Bomberman::handle_events()
                 if(event.key.keysym.sym == SDLK_ESCAPE)
                     quit();
             case SDL_KEYUP:
-                m_keyboard.update(event);
+                m_keyboard->update(event);
                 break;
             case SDL_MOUSEBUTTONDOWN:
             case SDL_MOUSEBUTTONUP:
             case SDL_MOUSEMOTION:
             case SDL_MOUSEWHEEL:
                 m_mouse.update(event);
+                break;
             case SDL_CONTROLLERAXISMOTION:
             case SDL_CONTROLLERBUTTONDOWN:
             case SDL_CONTROLLERBUTTONUP:
             case SDL_CONTROLLERDEVICEREMOVED:
-                m_gamepad_1.update(event);
-                m_gamepad_2.update(event);
-                m_gamepad_3.update(event);
-                m_gamepad_4.update(event);
+                m_gamepad_1->update(event);
+                std::cout << "\r" << *m_gamepad_1 << std::flush;
+                m_gamepad_2->update(event);
+                m_gamepad_3->update(event);
+                m_gamepad_4->update(event);
                 break;
             case SDL_CONTROLLERDEVICEADDED:
-                if(!m_gamepad_1.connected()) 
+                if(!m_gamepad_1->connected()) 
                 {
-                    m_gamepad_1 = engine::GamepadController(SDL_GameControllerOpen(event.cdevice.which));
-                    m_gamepad_1.simple_rumble(1.0, 750);
+                    m_gamepad_1 = new engine::GamepadController(SDL_GameControllerOpen(event.cdevice.which));
+                    m_gamepad_1->simple_rumble(1.0, 750);
                     std::cout << "\rNew controller mapped to location 1...\n";
                 }
-                else if(!m_gamepad_2.connected()) 
+                else if(!m_gamepad_2->connected()) 
                 {
-                    m_gamepad_2 = engine::GamepadController(SDL_GameControllerOpen(event.cdevice.which));
-                    m_gamepad_2.simple_rumble(1.0, 750);
+                    m_gamepad_2 = new engine::GamepadController(SDL_GameControllerOpen(event.cdevice.which));
+                    m_gamepad_2->simple_rumble(1.0, 750);
                     std::cout << "\rNew controller mapped to location 2...\n";
                 }
-                else if(!m_gamepad_3.connected()) 
+                else if(!m_gamepad_3->connected()) 
                 {
-                    m_gamepad_3 = engine::GamepadController(SDL_GameControllerOpen(event.cdevice.which));
-                    m_gamepad_3.simple_rumble(1.0, 750);
+                    m_gamepad_3 = new engine::GamepadController(SDL_GameControllerOpen(event.cdevice.which));
+                    m_gamepad_3->simple_rumble(1.0, 750);
                     std::cout << "\rNew controller mapped to location 3...\n";
                 }
-                else if(!m_gamepad_4.connected()) 
+                else if(!m_gamepad_4->connected()) 
                 {
-                    m_gamepad_4 = engine::GamepadController(SDL_GameControllerOpen(event.cdevice.which));
-                    m_gamepad_4.simple_rumble(1.0, 750);
+                    m_gamepad_4 = new engine::GamepadController(SDL_GameControllerOpen(event.cdevice.which));
+                    m_gamepad_4->simple_rumble(1.0, 750);
                     std::cout << "\rNew controller mapped to location 4...\n";
                 }
         }

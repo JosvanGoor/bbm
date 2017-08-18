@@ -2,7 +2,7 @@
 
 #include "../Bomberman.hpp"
 
-Bomb::Bomb(int player, int power, const geometry::Rectanglef &position) : engine::Entity(BOMB)
+Bomb::Bomb(Player *player, int power, const geometry::Rectanglef &position) : engine::Entity(BOMB)
 {
     m_player = player;
     m_power = power;
@@ -13,7 +13,7 @@ Bomb::Bomb(int player, int power, const geometry::Rectanglef &position) : engine
 
 int Bomb::player_id() const
 {
-    return m_player;
+    return m_player->player_id();
 }
 
 void Bomb::act()
@@ -51,62 +51,62 @@ std::string Bomb::to_string() const
 void Bomb::boom()
 {
     Level *level = (Level*)Bomberman::instance().game_state_controller();
-    level->add_actor(new Explosion(m_player, m_position));
+    level->add_actor(new Explosion(player_id(), m_position));
 
     //up
     geometry::Rectanglef pos(m_position);
-    for(int i = 0; i <= m_power; ++i)
+    for(int i = 0; i < m_power; ++i)
     {
         pos.translate(0.0f, -48.0f);
         if(level->collides_with_scenery(pos)) break;
         if(level->collides_with_mud(pos))
         {
-            level->add_actor(new Explosion(m_player, pos));
+            level->add_actor(new Explosion(player_id(), pos));
             break;
         }
-        level->add_actor(new Explosion(m_player, pos));
+        level->add_actor(new Explosion(player_id(), pos));
     }
 
     //down
     pos = m_position;
-    for(int i = 0; i <= m_power; ++i)
+    for(int i = 0; i < m_power; ++i)
     {
         pos.translate(0.0f, 48.0f);
         if(level->collides_with_scenery(pos)) break;
         if(level->collides_with_mud(pos))
         {
-            level->add_actor(new Explosion(m_player, pos));
+            level->add_actor(new Explosion(player_id(), pos));
             break;
         }
-        level->add_actor(new Explosion(m_player, pos));
+        level->add_actor(new Explosion(player_id(), pos));
     }
 
     //left
     pos = m_position;
-    for(int i = 0; i <= m_power; ++i)
+    for(int i = 0; i < m_power; ++i)
     {
         pos.translate(-48.0f, 0.0f);
         if(level->collides_with_scenery(pos)) break;
         if(level->collides_with_mud(pos))
         {
-            level->add_actor(new Explosion(m_player, pos));
+            level->add_actor(new Explosion(player_id(), pos));
             break;
         }
-        level->add_actor(new Explosion(m_player, pos));
+        level->add_actor(new Explosion(player_id(), pos));
     }
 
     //right
     pos = m_position;
-    for(int i = 0; i <= m_power; ++i)
+    for(int i = 0; i < m_power; ++i)
     {
         pos.translate(48, 0);
         if(level->collides_with_scenery(pos)) break;
         if(level->collides_with_mud(pos))
         {
-            level->add_actor(new Explosion(m_player, pos));
+            level->add_actor(new Explosion(player_id(), pos));
             break;
         }
-        level->add_actor(new Explosion(m_player, pos));
+        level->add_actor(new Explosion(player_id(), pos));
     }
 
     level->debug_print_actors();

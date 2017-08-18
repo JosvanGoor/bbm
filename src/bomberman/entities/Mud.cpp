@@ -6,7 +6,7 @@
 #include "../Bomberman.hpp"
 #include "../Level.hpp"
 
-Mud::Mud(const std::string &tex, const geometry::Rectanglef &position) : engine::Entity(MUD)
+Mud::Mud(const geometry::Rectanglef &position, const std::string &tex) : engine::Entity(MUD)
 {
     m_texture = tex;
     m_position = position;

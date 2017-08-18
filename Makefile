@@ -6,6 +6,7 @@ EXECUTABLE = bomberman
 BOMBERMAN_ENTITIES	=	bomberman/entities/Bomb.o \
 						bomberman/entities/Explosion.o \
 						bomberman/entities/Mud.o \
+						bomberman/entities/Player.o \
 						bomberman/entities/Powerup.o \
 						bomberman/entities/Wall.o
 
@@ -51,7 +52,7 @@ OBJECTS = $(BOMBERMAN) $(CORE) $(ENGINE) $(EXTERN) $(GEOMETRY) $(MATH) $(UTILITY
 
 #build macros
 COMPILER = g++
-FLAGS = -std=c++17 -Wall -g
+FLAGS = -std=c++17 -Wall -ggdb
 FLAGS_RELEASE = -std=c++17 -Wall -O2
 LIBRARIES = -lm
 

@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "entities/Wall.hpp"
+#include "entities/Player.hpp"
 #include "../engine/Entity.hpp"
 #include "../engine/DrawCall.hpp"
 #include "../engine/GameStateController.hpp"
@@ -21,6 +22,7 @@ class Level : public engine::GameStateController
         std::vector<engine::Entity*>& actors();
         std::vector<engine::Entity*>& scenery();
 
+        bool collides_with_actor_type(const geometry::Rectanglef &pos, int type);
         bool collides_with_mud(const geometry::Rectanglef &pos);
         bool collides_with_scenery(const geometry::Rectanglef &pos);
 
@@ -33,7 +35,10 @@ class Level : public engine::GameStateController
     protected:
         engine::DrawCall *m_draw_scenery;
 
-        //player 1-4
+        Player *m_player_1;
+        Player *m_player_2;
+        Player *m_player_3;
+        Player *m_player_4;
         std::vector<engine::Entity*> m_actors;
         std::vector<engine::Entity*> m_scenery;
 };

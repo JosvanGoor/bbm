@@ -40,12 +40,12 @@ class Bomberman
         math::Matrix4f default_view() const;
         engine::GameStateController* game_state_controller();
         engine::MouseController& mouse();
-        engine::KeyboardController& keyboard_controller();
-        engine::GamepadController& gamepad_controller_1();
-        engine::GamepadController& gamepad_controller_2();
-        engine::GamepadController& gamepad_controller_3();
-        engine::GamepadController& gamepad_controller_4();
-        engine::Controller& get_named_controller(engine::NamedController nc);
+        engine::KeyboardController* keyboard_controller();
+        engine::GamepadController* gamepad_controller_1();
+        engine::GamepadController* gamepad_controller_2();
+        engine::GamepadController* gamepad_controller_3();
+        engine::GamepadController* gamepad_controller_4();
+        engine::Controller* get_named_controller(engine::NamedController nc);
         engine::ShaderProgram* shader_program() const;
         GLuint shloc_texture() const;
         GLuint shloc_translation() const;
@@ -100,11 +100,11 @@ class Bomberman
 
         //user controls handles.
         engine::MouseController m_mouse;
-        engine::KeyboardController m_keyboard;
-        engine::GamepadController m_gamepad_1;
-        engine::GamepadController m_gamepad_2;
-        engine::GamepadController m_gamepad_3;
-        engine::GamepadController m_gamepad_4;
+        engine::KeyboardController *m_keyboard;
+        engine::GamepadController *m_gamepad_1;
+        engine::GamepadController *m_gamepad_2;
+        engine::GamepadController *m_gamepad_3;
+        engine::GamepadController *m_gamepad_4;
         
         //single-pass shader
         engine::ShaderProgram *m_shader_program;

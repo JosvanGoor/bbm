@@ -3,6 +3,7 @@
 
 #include <string>
 #include "Point.hpp"
+#include "../math/Math.hpp"
 #include "../core/Stringable.hpp"
 
 namespace geometry
@@ -42,6 +43,12 @@ namespace geometry
             {
                 m_x = x;
                 m_y = y;
+            }
+
+            void snap_to_grid(int gx, int gy)
+            {
+                m_x = math::snap_to_grid((int)m_x, gx);
+                m_y = math::snap_to_grid((int)m_y, gy);
             }
 
             bool contains(const Point<T> &p) const
